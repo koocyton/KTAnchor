@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="style.css" />
-<script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+<script src="jquery-1.4.1.min.js"></script>
 <script src="KTAnchor.js"></script>
+<link rel="stylesheet" href="KTAnchor.css"></link>
 </head>
-<body class="ar">
+<body>
 
 <table class="body-table">
 	<tr>
@@ -39,58 +39,8 @@
 </table>
 
 <script>
-function onSuccess(container, responseText)
-{
-	$.KTLog("JQuery.KTAnchor.succes : " + container);
-
-	// 举例：如果想输入一个脚本的处理方式
-	if (/^<script/.test(responseText)) {
-		$(responseText).appendTo(container).delay(800).remove();
-	}
-	// 举例：自定义的匹配处理
-	else if (/\[exception-message\:protected\] => ([^\n]+)/.test(responseText)) {
-		var exception_message = responseText.match(/\[exception-message\:protected\] => ([^\n]+)/);
-		$.KTLog(exception_message);
-	}
-	// 请求到的文本
-	else {
-		// 填充
-		$(container).empty();
-		$(container).html(responseText);
-
-		// 填充后将容器内的节点遍历，并绑定符合条件的 <a> 和  <form>
-		$(container).KTAnchor(onSuccess, onError, onBegin, onComplete);
-		$(container).KTForm(onInputError, onSuccess, onError, onBegin, onComplete);
-		$(container).KTPaging();
-		$(container).KTDropdown();
-	}
-}
-
-function onInputError(input, message)
-{
-	$.KTLog(input, message);
-}
-
-function onError(container, XMLHttpRequest)
-{
-	$.KTLog("JQuery.KTAnchor.error : " + container);
-}
-
-function onBegin(container)
-{
-	$.KTLog("JQuery.KTAnchor.begin : " + container);
-}
-
-function onComplete(container, XMLHttpRequest)
-{
-	$.KTLog("JQuery.KTAnchor.complete : " + container);
-}
-
 $(document).ready(function(){
-	$(document).KTAnchor(onSuccess, onError, onBegin, onComplete);
-	$(document).KTForm(onInputError, onSuccess, onError, onBegin, onComplete);
-	$(document).KTPaging();
-	$(document).KTDropdown();
+	$(document).KTAnchor().KTForm().KTPaging().KTDropdown();
 });
 </script>
 </body>

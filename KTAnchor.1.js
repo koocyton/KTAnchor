@@ -1,3 +1,52 @@
+// -*- coding:utf-8;mode:javascript-mode;-*-
+
+/*
+ * KTAjax For JQuery 包含如下功能
+ *
+ * $.KTAjax.init({
+ *    default-response-container : "response-container",
+ *    default-paging-limit : 30,
+ *    init-root-element : document
+ * });
+ *
+ * onBegin : function() {}
+ *
+ * onComplete : function() {}
+ *
+ * onError : function() {}
+ *
+ * onSuccess : function(container, response)
+ * {
+ * }
+ *
+ * $(document).anchorKTAjax(onBegin, onComplete, onSuccess, onError);
+ *
+ * $(document).formKTAjax(onBegin, onComplete, onSuccess, onError);
+ *
+ * 1、<a href="" pushstate="no" container="#load-response" native="yes" confirm="确认要删除此项 ？">DELETE</a>
+ *    将指定节点里的 <A> tag 统一绑定为 ajax 请求，并完成页面的 pushstate
+ *    pushstate 选填  当 pushstate 设置为 no，不会做 window.history.pushstate
+ *    container 选填  指定 response 会填充到哪个节点，默认尝试填充到 #response-container
+ *    native  选填  如果值为 yes 或 1 ，这个节点不会绑定事件
+ *    confirm  选填  点击会弹出一个 window.confirm ，点击 确认后，才会发送请求
+ *    注: 当 href="javascript:..." 时，相当于设置了 native="yes"
+ *
+ * 2、将指定节点里的 <FORM> tag 统一绑定为 ajax 请求，
+ *    当 method="get" 时会 window.history.pushstate
+ *    container 选填  指定 response 会填充到哪个节点，默认尝试填充到 #response-container
+ *    native  选填  如果值为 yes 或 1 ，这个节点不会绑定事件
+ *
+ * 3、<div class="paging-bar" total="" current="" limit="" request-url="" response-container="" pushstate=""></TAG>
+ *    <div class="paging-bar" 符合 $("div.paging-bar") 会尝试
+ *    tatal 必填，总共有多少条记录数
+ *    current 必填，当前从第几条记录开始
+ *    limit 选填，每页多少条记录，默认是 30
+ *    request-url 选填，如果此项有填，那么不会从 windown.location.href 获取路径了
+ *    response-container 选填，指定 response 填充的节点，默认填充到 #response-container
+ *    pushstate 选填，设置为 no 时，不会做 window.history.pushstate，需要和 request-url 配合使用
+ *
+ *
+ */
 (function($){
 
 	$.extend({
@@ -7,21 +56,16 @@
 			// version
 			version : "1.0.1",
 
-			// ajax : set default response_container
+			// set default response_container
 			response_container : "#response-container",
 
-			// paging : set default paging_limit
+			// set default paging_limit
 			paging_limit : 30,
 
-			// paging : the paging url parment ,  &.. or /.. 
-			paging_symbol : "&cc",
+			// 分页时 url 怎么传  &p=1 或 /p/1
+			paging_symbol : "&",
 
-			/* init parment
-			 * 
-			 * options.response_container 
-			 * options.paging_limit
-			 * options.paging_symbol
-			 */
+			// 初始化
 			init: function(options){
 
 				// init response_container
@@ -30,12 +74,12 @@
 				}
 
 				// init paging_limit
-				if (typeof(options.paging_limit)=="number" && options.paging_limit>=1) {
+				if (typeof(options.paging_limit)=="number") {
 					this.paging_limit = options.paging_limit;
 				}
 
 				// init paging_limit
-				if (typeof(options.paging_symbol)=="string" && /[\/|&]\w+/.test(options.paging_symbol)) {
+				if (typeof(options.paging_symbol)=="string") {
 					this.paging_symbol = options.paging_symbol;
 				}
 			}
@@ -273,19 +317,16 @@
 		},
 
 		KTPaging : function() {
-			return this;
 		},
 
 		KTDropdown : function() {
-			return this;
+		},
+
+		KTTreemenu : function() {
 		}
 	});
 
 })(jQuery);
 
-/* set KTAnchor default value */
-$.KTAnchor.init({
-	response_container: "#response-container", // Ajax, 设定默认 response 填充的区域
-	paging_limit: 30, // 分页，默认每页 30 条记录
-	paging_symbol: "&cc", // 分页，默认通过传统的 & 来分割，值通过 http.request.GET.cc 来传递
-});
+// run
+$.KTAnchor.init({response_container:"#response-container", paging_limit:30, paging_symbol:"&"});
