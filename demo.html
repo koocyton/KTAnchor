@@ -9,20 +9,33 @@
 <body>
 
 <table class="body-table">
+
 	<tr>
 		<td class="nav-left" colspan="2">
-			<div class="kt-dropdown" style="margin-left:8px;">
+			<div class="nav-item kt-anchor-dropdown" style="margin-left:11px;">
 				<a href="javascript:;" pushstate="no" class="bold-medium">
-					Language : English &nbsp; <b class="angle-down"></b>
+					Language : English
+					<b class="angle-down" style="right:-18px;top:18px;"></b>
 				</a>
-				<div class="dropdown">
-					<b class="angle-up" style="left:18px;"></b>
-					<div class="white-board"></div>
+				<div class="pop-layout" style="top:36px;">
+					<b class="angle-up" style="left:58px;"></b>
+					<div class="pop-board radius-4 shadow-3">
+						<div class="dropdown-menu" style="height:85px;width:200px;">
+							<ul>
+								<li><a class="radius-3" native="yes" href="?lang=zh_cn">简体中文</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=zh_tw">繁體中文</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=kr">한국어</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=jp">日本語</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=en">English</a></li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</td>
 		<td class="nav-right"></td>
 	</tr>
+
 	<tr>
 		<td class="body-left scroll-layout">
 			<div>
@@ -36,6 +49,7 @@
 			<div id="response-container" style="color:#fff;">2</div>
 		</td>
 	</tr>
+
 </table>
 
 <script>
