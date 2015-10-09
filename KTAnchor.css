@@ -22,7 +22,7 @@ table{border-collapse:collapse;}
 
 .angle-down,.angle-up{position:absolute;display:inline-block;height:0;width:0;border-left:5px solid transparent;border-right:5px solid transparent;}
 .angle-down{border-top:5px solid #fff;}
-.angle-up{border-bottom:5px solid #fff;top:-5px;}
+.angle-up{border-bottom:5px solid #fff;}
 
 .scroll-layout{position:relative;overflow:hidden;}
 .radius-4{-webkit-border-radius:4px;-khtml-border-radius:4px;-moz-border-radius:4px;border-radius:4px;}

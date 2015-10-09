@@ -50,9 +50,10 @@
 			},
 
 			hiddenDropdown: function(){
-				$.KTLog(arguments);
-				// $(".dropdown-toggle").next().css("display", "none");
-				// $(document.body).unbind("click", $.gii.hiddenDropdown);
+				$(document.body).find($.KTAnchor.dropdown_container).each(function(key, dropdownbar){
+					$(dropdownbar).children().last().css("display", "none");
+				});
+				$(document.body).unbind("click", $.KTAnchor.hiddenDropdown);
 			},
 
 			inputError: function(input, message){
@@ -120,7 +121,7 @@
 				"data" : data,
 				"contentType" : false,
 				"processData" : false,
-				"headers" : {"Ajax-Request":"jQuery.KTAjaxRequest " + $.KTAnchor.version},
+				"headers" : {"Ajax-Request":"jQuery.KTAjax " + $.KTAnchor.version},
 				"success" : function(responseText) {
 					if ($.isFunction(success)) success(responseText);
 				},
@@ -436,6 +437,10 @@
 					e.stopPropagation();
 					// 当前弹出窗关闭还是开启呢 ？
 					var style_display = $popup_elt.css("display");
+					// 先将弹出窗都关闭
+					$(container).each(function(key, elt){
+						$(elt).children().last().css("display", "none");
+					});
 					// 如果本来下拉菜单已经弹出
 					if (style_display=="none") {
 						// 显示下拉菜单
