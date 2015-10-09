@@ -50,9 +50,9 @@
 			},
 
 			hiddenDropdown: function(){
-
-					$(".dropdown-toggle").next().css("display", "none");
-					$(document.body).unbind("click", $.gii.hiddenDropdown);
+				$.KTLog(arguments);
+				// $(".dropdown-toggle").next().css("display", "none");
+				// $(document.body).unbind("click", $.gii.hiddenDropdown);
 			},
 
 			inputError: function(input, message){
@@ -429,7 +429,7 @@
 				// 已经绑定了 click 事件，重复执行，不会在同节点上反复绑定
 				if ($click_elt.data("click")==true) return;
 				// 取弹窗
-				var $popup_elt = click_elt.next();
+				var $popup_elt = $click_elt.next();
 				// 绑定
 				$click_elt.bind("click", function(e){
 					// 不冒泡 ... ?
@@ -453,7 +453,9 @@
 					}
 				});
 				// 弹出窗不冒泡，避免上面的链接点了后，立刻窗口隐藏，有点怪怪的
-				$popup_elt.bind("click", function(e){e.stopPropagation()});
+				$popup_elt.bind("click", function(e){
+					e.stopPropagation();
+				});
 				// 标注已经绑定了 click 事件，重复执行，不会在同节点上反复绑定
 				$click_elt.data("click", true);
 			});

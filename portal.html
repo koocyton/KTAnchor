@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="jquery-1.4.1.min.js"></script>
+<script src="KTAnchor.js"></script>
+<link rel="stylesheet" href="KTAnchor.css"></link>
+</head>
+<body>
+
+<table class="body-table">
+
+	<tr>
+		<td class="nav-left" colspan="2">
+			<div class="nav-item dropdown-container" style="margin-left:11px;">
+				<a href="javascript:;" pushstate="no" class="nav-item bold-medium">
+					Language : English
+					<b class="angle-down" style="right:-18px;top:18px;"></b>
+				</a>
+				<div class="pop-layout" style="top:36px;">
+					<b class="angle-up" style="left:58px;"></b>
+					<div class="pop-board radius-4 shadow-3">
+						<div class="dropdown-menu" style="height:85px;width:200px;">
+							<ul>
+								<li><a class="radius-3" native="yes" href="?lang=zh_cn">简体中文</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=zh_tw">繁體中文</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=kr">한국어</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=jp">日本語</a></li>
+								<li><a class="radius-3" native="yes" href="?lang=en">English</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+		<td class="nav-right"></td>
+	</tr>
+
+	<tr>
+		<td class="body-left scroll-layout">
+			<div>
+				<div><a href="/program/main/id/654" pushstate="no">error 500</a></div>
+				<div><a href="/program/main/id/654.php" pushstate="no">error 404</a></div>
+				<div><a href="rq_script.html" pushstate="no">script</a></div>
+				<div><a href="rq_exception.html" pushstate="no">exception</a></div>
+			</div>
+		</td>
+		<td class="body-right scroll-layout" colspan="2">
+			<div id="response-container" style="color:#fff;">2</div>
+		</td>
+	</tr>
+
+</table>
+
+<script>
+$(document).ready(function(){
+	$(document).KTAnchor().KTForm().KTPaging().KTDropdown();
+});
+</script>
+</body>
+</html>
