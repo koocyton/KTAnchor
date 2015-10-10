@@ -6,12 +6,12 @@ a, .bold-medium{font-size:8.75pt;color:#ccc;border:medium none;text-decoration:n
 a:hover, .bold-medium:hover{text-decoration:none;color:#fff;}
 table{border-collapse:collapse;}
 ul {}
-ul li{list-style-type:none;text-align:center;;float:left;}
+ul li{list-style-type:none;text-align:center;display:inline-block;}
 
 .body-table {width:100%;height:100%;background:url(bg.jpg);background-size:cover;}
 .nav-left, .nav-right{width:50%;height:40px;background:rgba(0, 0, 0, 0.8);color:#fff;}
 .nav-right{text-align:right;}
-.nav-item{position:relative;display:inline-block;height:40px;line-height:40px;vertical-align:center;}
+.nav-item{position:relative;display:inline-block;vertical-align:center;}
 .body-left, .body-right{vertical-align:top;}
 .body-left {width:62%;}
 .body-right {width:38%;}
