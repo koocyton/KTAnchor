@@ -5,30 +5,44 @@
 <script src="jquery-1.4.1.min.js"></script>
 <script src="KTAnchor.js"></script>
 <link rel="stylesheet" href="KTAnchor.css"></link>
+<link rel="stylesheet" href="octicons/octicons.css"></link>
 </head>
 <body>
 
 <table class="body-table">
 
 	<tr>
-		<td class="nav-left" colspan="2">
+		<td class="nav-left">
+			<div class="nav-item" style="margin-left:11px;">
+				<a href="javascript:;" pushstate="no" class="nav-item" style="font-size:14pt;color:#eee;">
+					Apollo
+				</a>
 
-
+			</div>
 		</td>
-		<td class="nav-right">
+		<td class="nav-right" colspan="2">
 
 			<div class="nav-item dropdown-container" style="margin-right:21px;">
-				<a href="javascript:;" pushstate="no" class="nav-item bold-medium">
-					config
+				<a href="javascript:;" pushstate="no" title="设置" class="nav-item bold-medium">
+					<span class="octicon octicon-gear" style="font:23px/1 octicons;padding:9px 0 0 0;"></span>
 				</a>
-				<div class="pop-layout" style="top:38px;right:-5px;">
-					<b class="angle-up" style="right:17px;top:-5px;"></b>
+				<div class="pop-layout" style="top:38px;right:-4px;">
+					<b class="angle-up" style="right:9px;top:-5px;"></b>
 					<div class="content-board radius-4 shadow-3">
 						<div class="dropdown-menu" style="height:85px;width:100px;">
 							<ul>
-								<li><a class="radius-3" native="yes" href="?lang=zh_cn">问题反馈</a></li>
-								<li><a class="radius-3" native="yes" href="?lang=zh_tw">账号安全</a></li>
-								<li><a class="radius-3" native="yes" href="?lang=kr">退出登录</a></li>
+								<li><a class="radius-3" href="/faq">
+									<span class="octicon octicon-mail-read"></span>
+									&nbsp;问题反馈
+								</a></li>
+								<li><a class="radius-3" href="/password">
+									<span class="octicon octicon-key"></span>
+									&nbsp;账号安全
+								</a></li>
+								<li><a class="radius-3" native="yes" href="login.html">
+									<span class="octicon octicon-sign-out"></span>
+									&nbsp;退出登录
+								</a></li>
 							</ul>
 						</div>
 					</div>
@@ -43,7 +57,7 @@
 			<div class="app-icons" style="margin:10px;">
 				<ul>
 
-					<a href="javascript:void(0);">
+					<a href="javascript:void(0);" onclick="">
 						<li>
 							<img src="bg.jpg" class="radius-14 app-icon"></img>
 							<div class="app-name">本地云</div>
@@ -64,8 +78,52 @@
 						</li>
 					</a>
 
+
+						<a href="javascript:void(0);" onclick="">
+							<li>
+								<img src="bg.jpg" class="radius-14 app-icon"></img>
+								<div class="app-name">本地云</div>
+							</li>
+						</a>
+
+						<a href="javascript:void(0);">
+							<li>
+								<img src="bg.jpg" class="radius-14 app-icon"></img>
+								<div class="app-name">YouTube</div>
+							</li>
+						</a>
+
+						<a href="javascript:void(0);">
+							<li>
+								<img src="bg.jpg" class="radius-14 app-icon"></img>
+								<div class="app-name">设置</div>
+							</li>
+						</a>
+
+
+							<a href="javascript:void(0);" onclick="">
+								<li>
+									<img src="bg.jpg" class="radius-14 app-icon"></img>
+									<div class="app-name">本地云</div>
+								</li>
+							</a>
+
+							<a href="javascript:void(0);">
+								<li>
+									<img src="bg.jpg" class="radius-14 app-icon"></img>
+									<div class="app-name">YouTube</div>
+								</li>
+							</a>
+
+							<a href="javascript:void(0);">
+								<li>
+									<img src="bg.jpg" class="radius-14 app-icon"></img>
+									<div class="app-name">设置</div>
+								</li>
+							</a>
 				</ul>
 			</div>
+			<div></div>
 		</td>
 		<td class="body-right content-board opacity-95">
 			<div id="response-container" style="color:#fff;">2</div>
