@@ -22,7 +22,7 @@
 				<div class="pop-layout" style="top:38px;left:-7px;">
 					<b class="angle-up" style="left:32%;top:-5px;"></b>
 					<div class="content-board radius-4 shadow-3">
-						<div class="dropdown-menu" style="height:85px;width:203px;">
+						<div class="dropdown-menu" style="height:85px;width:204px;">
 							<ul>
 								<li><a class="radius-3" native="yes" href="?lang=zh_cn">简体中文</a></li>
 								<li><a class="radius-3" native="yes" href="?lang=zh_tw">繁體中文</a></li>
@@ -43,8 +43,48 @@
 
 	<tr>
 		<td class="body-right scroll-layout" colspan="2">
-			<div class="content-board radius-4" style="width:300px;margin:20% 20%;">
-				2
+			<div class="content-board radius-4 login-form" style="position:absolute;left:15%;top:50%;">
+				
+				<!-- Login Form [begin] //-->
+				<form action="/login" method="post">
+
+					<div style="width:265px;position:relative;">
+						<dl>
+							<dd>
+								<input type="text" class="text-input" maxlength="50" name="account" validation="/!empty:请填写你的账号/" placeholder="账号" value="" />
+							</dd>
+						</dl>
+					</div>
+
+					<table style="margin:6px 0;"><tbody><tr><td style="width:99%;">
+
+						<div style="width:187px;position:relative;">
+							<dl>
+								<dd>
+									<input type="password" class="text-input" maxlength="50" name="password" validation="/!empty:请输入你的密码/" placeholder="密码" value="" />
+								</dd>
+							</dl>
+						</div>
+
+					</td><td style="width:1%;">
+
+						<div>
+							<button class="button-btn" id="submit" style="width:70px;">登录</button>
+						</div>
+
+					</td></tr></tbody></table>
+
+					<div style="height:25px;">
+						<label style="color:#8899a6">
+							<input type="checkbox" value="rember" />
+							记住我						</label>
+						<span class="separator">·</span>
+						<a href="javascript:;" native="yes" style="color:#0084b4">忘记密码了?</a>
+					</div>
+
+				</form>
+			<!-- Login Form [End] //-->
+
 			</div>
 		</td>
 	</tr>

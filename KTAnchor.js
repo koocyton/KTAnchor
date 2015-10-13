@@ -58,6 +58,15 @@
 
 			inputError: function(input, message){
 				$.KTLog("JQuery.KTAnchor.inputError : " + message, input);
+
+				var $input = $(input);
+				var $input_parent = $input.parent();
+
+				if (!$.contains($input_parent, $input_parent.find(".input-error-pop"))) {
+					// $input_parent.after("<dd class=\"input-error-pop radius-4\"><b class=\"angle angle-10 input-error-angle\"></b> &nbsp; "+message+"</dd>");
+				}
+
+				// $input_parent.next(".input-error-pop").css("display", "block");
 			},
 
 			success: function(container, responseText){
@@ -136,6 +145,10 @@
 	});
 
 	$.fn.extend({
+
+		exist: function() {
+			return ($(this).length>=1) ? true : false;
+		},
 
 		KTAnchor : function(success, error, begin, complete) {
 			// 取得 某文档下 所有没有被标注为原生的 anchor

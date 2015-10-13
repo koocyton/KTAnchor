@@ -1,4 +1,4 @@
-*{margin:0;padding:0;text-align:left;}
+*{margin:0;padding:0;text-align:left;vertical-align:middle;}
 html, body{width:100%;height:100%;}
 body{overflow:hidden;background:#fff;color:#292f33;font-size:14px;line-height:18px;font-size:8.75pt;font-family:Arial;}
 .bold-medium{font-weight:bold;}
@@ -12,9 +12,7 @@ ul li{list-style-type:none;text-align:center;display:inline-block;}
 .nav-left, .nav-right{width:50%;height:40px;background:rgba(0, 0, 0, 0.8);color:#fff;}
 .nav-right{text-align:right;}
 .nav-item{position:relative;display:inline-block;vertical-align:center;}
-.body-left, .body-right{vertical-align:top;}
-.body-left {width:62%;}
-.body-right {width:38%;}
+.body-left,.body-right{vertical-align:top;}
 
 .dropdown-menu{padding:5px;}
 .dropdown-menu ul li a{display:block;width:80px;font-size:13px;height:18px;line-height:18px;padding:5px 10px;text-align:left;color:#444;}
@@ -39,3 +37,16 @@ ul li{list-style-type:none;text-align:center;display:inline-block;}
 .app-icons ul li{width:100px;height:100px;margin:32px 0 0 32px;}
 .app-icon {position:relative;width:100%;height:100%;top:0px;}
 .app-name {position:relative;top:0px;text-align:center;font-weight:bold;color:#444;}
+
+.login-form{position:absolute;width:276px;padding:10px;height:96px;background:none repeat scroll 0 0 rgba(255,255,255,0.9);}
+input, select {vertical-align:middle;display:inline-block;outline: 0 none;}
+input.text-input, textarea, select.text-input {resize: none;padding: 0 4px;width:100%;-webkit-border-radius:4px;-khtml-border-radius:4px;-moz-border-radius:4px;border-radius:4px;font-size:12pt;background-color: #fff;text-align:left;border:1px solid #ccc; }
+input.text-input, select.text-input {height:32px;line-height:32px;}
+input.text-input:focus, textarea:focus {border:1px solid #56b4ef;-webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.05) inset, 0 0 8px rgba(82, 168, 236, 0.6);-moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.05) inset, 0 0 8px rgba(82, 168, 236, 0.6);box-shadow:0 1px 3px rgba(0, 0, 0, 0.05) inset, 0 0 8px rgba(82, 168, 236, 0.6);}
+button {vertical-align:middle;-webkit-border-radius:4px;-khtml-border-radius:4px;-moz-border-radius:4px;border-radius:4px;width:150px;text-align:center;color:#ffffff;height:34px;line-height:30px;border:0;font-weight:bold;font-size:8.75pt;font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,simsun,"宋体";}
+.submit-btn{background-color:#F26459;} .submit-btn:hover{background-color:#D84A38;}
+.button-btn{background-color:#1195C5;} .button-btn:hover{background-color:#0084b4;}/*0084b4 1B9FCF*/
+.toggle-btn{background-color:#7BCD40;} .toggle-btn:hover{background-color:#61B31F;}
+
+.input-error-pop {position:absolute; top:32px; width:101%;height:30px;line-height:30px;background-color:#333;color:#fff;font-size:12px;padding: 2px 4px;z-index:10;}
+.input-error-angle{position:absolute;border-bottom:5px solid #333;top:-5px;left:10px;}
