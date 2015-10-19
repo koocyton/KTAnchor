@@ -47,11 +47,15 @@
 				if (typeof(options.dropdown_container)=="string") {
 					this.dropdown_container = options.dropdown_container;
 				}
+				// init treemenu_container
+				if (typeof(options.treemenu_container)=="string") {
+					this.treemenu_container = options.treemenu_container;
+				}
 			},
 
 			hiddenDropdown: function(){
-				$(document.body).find($.KTAnchor.dropdown_container).each(function(key, dropdownbar){
-					$(dropdownbar).children().last().css("display", "none");
+				$(document.body).find($.KTAnchor.dropdown_container).each(function(key, dropdown_bar){
+					$(dropdown_bar).children().last().css("display", "none");
 				});
 				$(document.body).unbind("click", $.KTAnchor.hiddenDropdown);
 			},
@@ -89,7 +93,8 @@
 					$(container).KTAnchor($.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete);
 					$(container).KTForm($.KTAnchor.inputError, $.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete);
 					$(container).KTPaging();
-					$(container).KTDropdown();
+					$(container).KTDropDown();
+					$(container).KTTreeMenu();
 				}
 			},
 
@@ -141,6 +146,47 @@
 					if ($.isFunction(complete)) complete(XMLHttpRequest);
 				}
 			});
+		},
+
+		KTTreeMenuHTML: {
+
+			getMenuItemHtml: function(menu_item) {
+				return '<a href="'+menu_item.href+'" class="tree-menu tree-menu-'+menu_item.level+'"><div>'+menu_item.text+'</div></a>';
+			},
+
+			getMenuFolderHtml: function(menu_item) {
+				if (menu_item.level=="0") {
+					return '<a href="javascript:;" class="tree-menu tree-menu-0"><div>'+menu_item.text+'</div></a>';
+				}
+				else if (menu_item.level=="1") {
+					var toggle_class = menu_item.open ? "tree-menu-open" : "tree-menu-close" ;
+					return '<a href="javascript:;" class="tree-menu tree-menu-1 '+toggle_class+'"><div>'+menu_item.text+'</div></a>';
+				}
+			},
+
+			getMenuHtml(menus) {
+				var menu_html = "";
+				$.each(menus, function(name, menu_item) {
+					if (typeof(menu_item.href)=="string") {
+						menu_html += $.KTTreeMenuHTML.getMenuItemHtml(menu_item);
+					}
+					else if ($.isObject(menu_item.menu)) {
+						menu_html += $.KTTreeMenuHTML.getMenuFolderHtml(menu_item);
+						if (menu_item.level=="0") {
+							menu_html += '<div class="menu_layout" style="display: block;">'+$.KTTreeMenuHTML.getMenuHtml(menu_item.menu)+'</div>';
+						}
+						else if (menu_item.level=="1") {
+							var display = (typeof(menu_item.open)!="undefined" && menu_item.open==true) ? "block" : "none" ;
+							menu_html += '<div class="menu_layout" style="display: '+display+';">'+$.KTTreeMenuHTML.getMenuHtml(menu_item.menu)+'</div>';
+						}
+					}
+				});
+				return menu_html;
+			},
+
+			writeMenuHtml(menus) {
+				document.write($.KTTreeMenuHTML.getMenuHtml(menus));
+			}
 		}
 	});
 
@@ -189,11 +235,11 @@
 						},
 						// 错误
 						function(XMLHttpRequest){
-							$.isFunction(error) ? error(container, XMLHttpRequest) : $.KTAnchor.error(container, responseText);
+							$.isFunction(error) ? error(container, XMLHttpRequest) : $.KTAnchor.error(container, XMLHttpRequest);
 						},
 						// 结束 ( 成功或失败后 )
 						function(XMLHttpRequest){
-							$.isFunction(complete) ? complete(container, XMLHttpRequest) : $.KTAnchor.complete(container, responseText);
+							$.isFunction(complete) ? complete(container, XMLHttpRequest) : $.KTAnchor.complete(container, XMLHttpRequest);
 						}
 					);
 					// 防止链接点击生效
@@ -241,11 +287,11 @@
 						},
 						// 错误
 						function(XMLHttpRequest){
-							$.isFunction(error) ? error(container, XMLHttpRequest) : $.KTAnchor.error(container, responseText);
+							$.isFunction(error) ? error(container, XMLHttpRequest) : $.KTAnchor.error(container, XMLHttpRequest);
 						},
 						// 结束 ( 成功或失败后 )
 						function(XMLHttpRequest){
-							$.isFunction(complete) ? complete(container, XMLHttpRequest) : $.KTAnchor.complete(container, responseText);
+							$.isFunction(complete) ? complete(container, XMLHttpRequest) : $.KTAnchor.complete(container, XMLHttpRequest);
 						}
 					);
 					// 禁止表单继续提交
@@ -354,13 +400,13 @@
 			// 从配置中获取参数配置
 			var container = $.KTAnchor.paging_container;
 			// 开始查找
-			this.find(container).each(function(key, pagingbar){
+			this.find(container).each(function(key, paging_bar){
 				// jQuery 对象
-				var $pagingbar = $(pagingbar);
+				var $paging_elt = $(paging_bar);
 				// 获取主要的数据
-				var tatal = 0 + $pagingbar.attr("tatal");
-				var current = 0 + $pagingbar.attr("current");
-				var limit = $pagingbar.attr("limit");
+				var tatal = 0 + $paging_elt.attr("tatal");
+				var current = 0 + $paging_elt.attr("current");
+				var limit = $paging_elt.attr("limit");
 				if (typeof(limit)=="undefined") limit = $.KTAjax.paging_limit;
 				// 最大页码 当前页码
 				var max_page = Math.ceil(tatal / limit);
@@ -386,20 +432,20 @@
 					}
 				}
 				// class
-				var class_name = $pagingbar.attr("paging_class");
+				var class_name = $paging_elt.attr("paging_class");
 				// request url
-				var request_url = $pagingbar.attr("request_url");
+				var request_url = $paging_elt.attr("request_url");
 				// get location
 				if (typeof(request_url)=="undefined") {
 					request_url = window.location.href;
 				}
 				// 分页参 连接 URL 的符号
-				var paging_symbol = $pagingbar.attr("paging_symbol");
+				var paging_symbol = $paging_elt.attr("paging_symbol");
 				if (typeof(paging_symbol)=="undefined") {
 					paging_symbol = $.KTAjax.paging_symbol;
 				}
 				// 是否发生 pushstate
-				var pushstate = $pagingbar.attr("pushstate");
+				var pushstate = $paging_elt.attr("pushstate");
 				var pushstate_html = "";
 				if (typeof(pushstate)=="string" && pushstate=="no") {
 					pushstate_html = "pushstate=\"no\"";
@@ -427,19 +473,63 @@
 						paging_html += "<a href=\""+href+"\" class=\""+class_name+"\" "+pushstate_html+">"+page_list[ii]+"</a>";
 					}
 				}
-				$pagingbar.html(paging_html);
+				$paging_elt.html(paging_html);
 			});
 			// 返回 JQuery 对象
 			return this;
 		},
 
-		KTDropdown : function() {
+		KTTreeMenu : function(){
+			//  从配置中获取参数
+			var container = $.KTAnchor.treemenu_container;
+			// 开始遍历
+			this.find(container).each(function(key, treemenu_bar){
+				// 拿到匹配节点
+				var $treemenu_elt = $(treemenu_bar);
+				// 处理节点，绑定事件
+				$treemenu_elt.setMainMenuEvent();
+			});
+			return this;
+		},
+
+		setMainMenuEvent : function(){
+			// 开始循环
+			this.each(function(key, menu_elt) {
+				// 取得一个节点
+				var $menu_elt = $(menu_elt);
+				// 取得下一个节点
+				var $next_elt = $menu_elt.next("div");
+				// 如果节点后有DIV，说明一个折叠菜单
+				if ($next_elt.exist()) {
+					// 绑定点击事件
+					$menu_elt.bind("click", function() {
+						// 打开菜单
+						if ($next_elt.css("display")=="none") {
+							$next_elt.css("display", "block");
+							if ($menu_elt.hasClass("tree-menu-1")) $menu_elt.removeClass("tree-menu-close").addClass("tree-menu-open");
+						}
+						// 折叠菜单
+						else {
+							$next_elt.css("display", "none");
+							if ($menu_elt.hasClass("tree-menu-1")) $menu_elt.removeClass("tree-menu-open").addClass("tree-menu-close");
+						}
+						// menu_elt 没错
+						menu_elt.blur();
+						return false;
+					});
+					// 循环的递归
+					$menu_elt.next("div").children("a").setMainMenuEvent();
+				}
+			});
+		},
+
+		KTDropDown : function() {
 			// 从配置中获取参数配置
 			var container = $.KTAnchor.dropdown_container;
 			// 开始查找
-			this.find(container).each(function(key, dropdownbar){
+			this.find(container).each(function(key, dropdown_bar){
 				// 取节点
-				var $click_elt = $(dropdownbar).children().first();
+				var $click_elt = $(dropdown_bar).children().first();
 				// 已经绑定了 click 事件，重复执行，不会在同节点上反复绑定
 				if ($click_elt.data("click")==true) return;
 				// 取弹窗
@@ -491,4 +581,5 @@ $.KTAnchor.init({
 	paging_limit: 30, // 分页，默认每页 30 条记录
 	paging_symbol: "&cc", // 分页，默认通过传统的 & 来分割，值通过 http.request.GET.cc 来传递
 	dropdown_container: ".dropdown-container", // 弹出菜单，通过识别此节点，来绑定 下拉菜单的 事件
+	treemenu_container: ".treemenu-container", // 树状菜单，通过识别此节点，来绑定 树状菜单 点击事件
 });

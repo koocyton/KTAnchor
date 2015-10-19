@@ -55,6 +55,14 @@
 
 	<tr>
 		<td class="body-left content-board opacity-80" style="width:20%;">
+		<script>
+		var menu_data = [
+			{"text":"text", "href":"href", "level":0},
+			{"text":"text", "href":"href", "level":0},
+			{"text":"text", "href":"href", "level":0}
+		];
+		$.KTTreeMenuHTML.writeMenuHtml(menu_data);
+		</script>
 		</td>
 		<td class="body-right content-board opacity-95" colspan="2" style="width:80%;">
 			<div id="response-container" style="color:#fff;">2</div>
@@ -65,7 +73,7 @@
 
 <script>
 $(document).ready(function(){
-	$(document).KTAnchor().KTForm().KTPaging().KTDropdown();
+	$(document).KTAnchor().KTForm().KTPaging().KTDropDown();
 });
 </script>
 </body>
