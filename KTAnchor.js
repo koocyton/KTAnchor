@@ -89,12 +89,7 @@
 					// 填充
 					$(container).empty();
 					$(container).html(responseText);
-					// 填充后将容器内的节点遍历，并绑定符合条件的 <a> 和  <form>
-					$(container).KTAnchor($.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete);
-					$(container).KTForm($.KTAnchor.inputError, $.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete);
-					$(container).KTPaging();
-					$(container).KTDropDown();
-					$(container).KTTreeMenu();
+					$(container).KTPaging().KTTreeMenu().KTAnchor().KTForm().KTDropDown();
 				}
 			},
 
@@ -150,42 +145,45 @@
 
 		KTTreeMenuHTML: {
 
-			getMenuItemHtml: function(menu_item) {
-				return '<a href="'+menu_item.href+'" class="tree-menu tree-menu-'+menu_item.level+'"><div>'+menu_item.text+'</div></a>';
+			getMenuItemHtml: function(menu_item, menu_level) {
+				return '<a href="'+menu_item.href+'" class="tree-menu tree-menu-'+menu_level+'"><div>'+menu_item.text+'</div></a>';
 			},
 
-			getMenuFolderHtml: function(menu_item) {
-				if (menu_item.level=="0") {
+			getMenuFolderHtml: function(menu_item, menu_level) {
+				if (menu_level=="0") {
 					return '<a href="javascript:;" class="tree-menu tree-menu-0"><div>'+menu_item.text+'</div></a>';
 				}
-				else if (menu_item.level=="1") {
+				else if (menu_level=="1") {
 					var toggle_class = menu_item.open ? "tree-menu-open" : "tree-menu-close" ;
 					return '<a href="javascript:;" class="tree-menu tree-menu-1 '+toggle_class+'"><div>'+menu_item.text+'</div></a>';
 				}
 			},
 
-			getMenuHtml(menus) {
+			getMenuHtml(menus_data, menu_level) {
+				// 初始化 html
 				var menu_html = "";
-				$.each(menus, function(name, menu_item) {
-					if (typeof(menu_item.href)=="string") {
-						menu_html += $.KTTreeMenuHTML.getMenuItemHtml(menu_item);
+				// 初始化菜单等级
+				var menu_level = (typeof(menu_level)!="number") ? 0 : menu_level;
+				// 开始循环
+				$.each(menus_data, function(name, menu_data) {
+					// 如果有子菜单
+					if ($.isArray(menu_data.menus)) {
+						menu_html += $.KTTreeMenuHTML.getMenuFolderHtml(menu_data, menu_level);
+						if (menu_level==0) {
+							menu_html += '<div class="menu_layout" style="display: block;">'+$.KTTreeMenuHTML.getMenuHtml(menu_data.menus, 1+menu_level)+'</div>';
+						}
+						else if (menu_level==1) {
+							var display = (typeof(menu_data.open)!="undefined" && menu_data.open==true) ? "block" : "none" ;
+							menu_html += '<div class="menu_layout" style="display: '+display+';">'+$.KTTreeMenuHTML.getMenuHtml(menu_data.menus, 1+menu_level)+'</div>';
+						}
 					}
-					else if ($.isObject(menu_item.menu)) {
-						menu_html += $.KTTreeMenuHTML.getMenuFolderHtml(menu_item);
-						if (menu_item.level=="0") {
-							menu_html += '<div class="menu_layout" style="display: block;">'+$.KTTreeMenuHTML.getMenuHtml(menu_item.menu)+'</div>';
-						}
-						else if (menu_item.level=="1") {
-							var display = (typeof(menu_item.open)!="undefined" && menu_item.open==true) ? "block" : "none" ;
-							menu_html += '<div class="menu_layout" style="display: '+display+';">'+$.KTTreeMenuHTML.getMenuHtml(menu_item.menu)+'</div>';
-						}
+					// 如果没有子菜单
+					else if (typeof(menu_data.href)=="string") {
+						menu_html += $.KTTreeMenuHTML.getMenuItemHtml(menu_data, menu_level);
 					}
 				});
-				return menu_html;
-			},
-
-			writeMenuHtml(menus) {
-				document.write($.KTTreeMenuHTML.getMenuHtml(menus));
+				return (menu_level==0) ? '<div class="'+$.KTAnchor.treemenu_container.substr(1)+'">'+menu_html+'</div>' : menu_html;
+				// return menu_html;
 			}
 		}
 	});
@@ -407,7 +405,7 @@
 				var tatal = 0 + $paging_elt.attr("tatal");
 				var current = 0 + $paging_elt.attr("current");
 				var limit = $paging_elt.attr("limit");
-				if (typeof(limit)=="undefined") limit = $.KTAjax.paging_limit;
+				if (typeof(limit)=="undefined") limit = $.KTAnchor.paging_limit;
 				// 最大页码 当前页码
 				var max_page = Math.ceil(tatal / limit);
 				var current_page = Math.ceil(current / limit);
@@ -431,18 +429,26 @@
 						page_list = [1,"...",current_page-2,current_page-1,current_page,current_page+1,current_page+2,"...",max_page];
 					}
 				}
-				// class
+				// class name
 				var class_name = $paging_elt.attr("paging_class");
+				if (typeof(class_name)=="undefined") {
+					class_name = "paging-anchor radius-4";
+				}
+				// current class name
+				var current_class_name = $paging_elt.attr("current_paging_class");
+				if (typeof(current_class_name)=="undefined") {
+					current_class_name = "paging-current-anchor radius-4";
+				}
 				// request url
 				var request_url = $paging_elt.attr("request_url");
-				// get location
 				if (typeof(request_url)=="undefined") {
 					request_url = window.location.href;
 				}
 				// 分页参 连接 URL 的符号
 				var paging_symbol = $paging_elt.attr("paging_symbol");
-				if (typeof(paging_symbol)=="undefined") {
-					paging_symbol = $.KTAjax.paging_symbol;
+				if (!/[\&|\/]\w+/.test(paging_symbol)) {
+					paging_symbol1 = $.KTAnchor.paging_symbol.substr(0, 1);
+					paging_symbol2 = $.KTAnchor.paging_symbol.substr(1);
 				}
 				// 是否发生 pushstate
 				var pushstate = $paging_elt.attr("pushstate");
@@ -453,21 +459,22 @@
 				// 输出页面
 				var paging_html = "";
 				for(var ii=0; ii<page_list.length; ii++) {
-					var cc = 1 + ( page_list[ii]-1 ) * limit;
+					var m = 1 + ( page_list[ii]-1 ) * limit;
+					$.KTLog(/\/p\/[0-9]+/, new RegExp("\/"+paging_symbol2+"\/[0-9]+"), /[\?\&]p=[0-9]+/, new RegExp("[\\?\\&]"+paging_symbol2+"=[0-9]+"));
 					// get href
-					if (paging_symbol=="/") {
-						var href = request_url.replace(/\/p\/[0-9]+/, "")+"/p/"+cc;
+					if (paging_symbol1=="/") {
+						var href = request_url.replace(new RegExp("\/"+paging_symbol2+"\/[0-9]+"), "")+"/"+paging_symbol2+"/"+m;
 					}
 					else {
-						var href = request_url.replace(/[\?\&]p=[0-9]+/, "");
-						href = (/\?/.test(href)) ? href+"&p="+cc : href+"?p="+cc;
+						var href = request_url.replace(new RegExp("[\\?\\&]"+paging_symbol2+"=[0-9]+"), "");
+						href = (/\?/.test(href)) ? href+"&"+paging_symbol2+"="+m : href+"?"+paging_symbol2+"="+m;
 					}
 					// 组织 html
 					if (page_list[ii]=="...") {
 						paging_html += "<span class=\""+class_name+"\" style=\"border:0;\">"+page_list[ii]+"</span>";
 					}
 					else if (page_list[ii]==current_page){
-						paging_html += "<a href=\""+href+"\" class=\""+class_name+"\" style=\"background-color:#aaa;color:#666;\" "+pushstate_html+">"+page_list[ii]+"</a>";
+						paging_html += "<a href=\""+href+"\" class=\""+class_name+" "+current_class_name+"\" "+pushstate_html+">"+page_list[ii]+"</a>";
 					}
 					else {
 						paging_html += "<a href=\""+href+"\" class=\""+class_name+"\" "+pushstate_html+">"+page_list[ii]+"</a>";
@@ -483,18 +490,16 @@
 			//  从配置中获取参数
 			var container = $.KTAnchor.treemenu_container;
 			// 开始遍历
-			this.find(container).each(function(key, treemenu_bar){
-				// 拿到匹配节点
-				var $treemenu_elt = $(treemenu_bar);
+			this.find(container).each(function(key, treemenu_elt){
 				// 处理节点，绑定事件
-				$treemenu_elt.setMainMenuEvent();
+				$(treemenu_elt).setMainMenuEvent();
 			});
 			return this;
 		},
 
 		setMainMenuEvent : function(){
 			// 开始循环
-			this.each(function(key, menu_elt) {
+			this.children("a").each(function(key, menu_elt) {
 				// 取得一个节点
 				var $menu_elt = $(menu_elt);
 				// 取得下一个节点
@@ -518,7 +523,7 @@
 						return false;
 					});
 					// 循环的递归
-					$menu_elt.next("div").children("a").setMainMenuEvent();
+					$next_elt.setMainMenuEvent();
 				}
 			});
 		},
@@ -576,8 +581,8 @@
 
 /* set KTAnchor default value */
 $.KTAnchor.init({
-	response_container: "#response-container", // Ajax, 设定默认 response 填充的区域
-	paging_container: "#paging-container", // 分页，分页的容器
+	response_container: ".response-container", // Ajax, 设定默认 response 填充的区域
+	paging_container: ".paging-container", // 分页，分页的容器
 	paging_limit: 30, // 分页，默认每页 30 条记录
 	paging_symbol: "&cc", // 分页，默认通过传统的 & 来分割，值通过 http.request.GET.cc 来传递
 	dropdown_container: ".dropdown-container", // 弹出菜单，通过识别此节点，来绑定 下拉菜单的 事件
