@@ -51,6 +51,10 @@
 				if (typeof(options.treemenu_container)=="string") {
 					this.treemenu_container = options.treemenu_container;
 				}
+				// init mousewheel_container
+				if (typeof(options.mousewheel_container)=="string") {
+					this.mousewheel_container = options.mousewheel_container;
+				}
 			},
 
 			hiddenDropdown: function(){
@@ -460,7 +464,7 @@
 				var paging_html = "";
 				for(var ii=0; ii<page_list.length; ii++) {
 					var m = 1 + ( page_list[ii]-1 ) * limit;
-					$.KTLog(/\/p\/[0-9]+/, new RegExp("\/"+paging_symbol2+"\/[0-9]+"), /[\?\&]p=[0-9]+/, new RegExp("[\\?\\&]"+paging_symbol2+"=[0-9]+"));
+					// $.KTLog(/\/p\/[0-9]+/, new RegExp("\/"+paging_symbol2+"\/[0-9]+"), /[\?\&]p=[0-9]+/, new RegExp("[\\?\\&]"+paging_symbol2+"=[0-9]+"));
 					// get href
 					if (paging_symbol1=="/") {
 						var href = request_url.replace(new RegExp("\/"+paging_symbol2+"\/[0-9]+"), "")+"/"+paging_symbol2+"/"+m;
@@ -574,6 +578,17 @@
 			});
 			// 返回 JQuery 对象
 			return this;
+		},
+
+		KTMouseWheel : function() {
+			// 从配置中获取参数配置
+			var container = $.KTAnchor.mousewheel_container;
+			this.find(container).each(function(key, mousewheel_bar){
+				$(mousewheel_bar).bind("mousewheel", function(ev, delta) {
+					var padding_top = parseInt($(this).css("padding-top"))+5;
+					$(this).css("padding-top", padding_top + "px");
+				});
+			});
 		}
 	});
 
@@ -587,4 +602,5 @@ $.KTAnchor.init({
 	paging_symbol: "&cc", // 分页，默认通过传统的 & 来分割，值通过 http.request.GET.cc 来传递
 	dropdown_container: ".dropdown-container", // 弹出菜单，通过识别此节点，来绑定 下拉菜单的 事件
 	treemenu_container: ".treemenu-container", // 树状菜单，通过识别此节点，来绑定 树状菜单 点击事件
+	mousewheel_container: ".mousewheel-container" // 自定义相应鼠标滚动，通过识别此节点，来绑定
 });
