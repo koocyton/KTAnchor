@@ -588,6 +588,8 @@
 			var container = $.KTAnchor.mousewheel_container;
 			// 查询匹配的节点
 			this.find(container).each(function(key, mousewheel_bar) {
+				// 初始化滚动条
+				$(mousewheel_bar).append('<div class="scroll-floor"><dir class="scroll-bar radius-4"></div></div>');
 				// 绑定事件
 				$(mousewheel_bar).bind("mousewheel", function(ev, delta) {
 					// 如果鼠标滚动的方向发生改变，就重初始化积累值
@@ -614,6 +616,7 @@
 			if ($.KTAnchor.wheel_delta==0) { return }
 			// 查询滚动层内的所有节点
 			$(this).children().each(function(key, children) {
+				if ($(children).hasClass("scroll-floor")) {return;}
 				// 取得某个节点的 top
 				var children_top = parseInt($(children).css("top"));
 				var drift_speed = Math.abs($.KTAnchor.wheel_delta)>6 ? 6 : Math.abs($.KTAnchor.wheel_delta);
