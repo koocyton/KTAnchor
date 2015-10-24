@@ -19,6 +19,9 @@
 			// paging : the paging url parment ,  &.. or /..
 			paging_symbol : "&cc",
 
+			// 鼠标滚动的积累值
+			wheel_delta : 0,
+
 			/* init parment
 			 *
 			 * options.response_container
@@ -583,12 +586,48 @@
 		KTMouseWheel : function() {
 			// 从配置中获取参数配置
 			var container = $.KTAnchor.mousewheel_container;
-			this.find(container).each(function(key, mousewheel_bar){
+			// 查询匹配的节点
+			this.find(container).each(function(key, mousewheel_bar) {
+				// 绑定事件
 				$(mousewheel_bar).bind("mousewheel", function(ev, delta) {
-					var padding_top = parseInt($(this).css("padding-top"))+5;
-					$(this).css("padding-top", padding_top + "px");
+					// 如果鼠标滚动的方向发生改变，就重初始化积累值
+					if ((delta>0 && $.KTAnchor.wheel_delta<0) || (delta<0 && $.KTAnchor.wheel_delta>0)) {
+						$.KTAnchor.wheel_delta = 0;
+					}
+					// 当滚轮移动一格时，既积累值正负移动一位，激活页面滚动
+					if ($.KTAnchor.wheel_delta==0) {
+						// 鼠标滚动，100 毫秒后，开始移动这个节点内的元素
+						setTimeout($.fn.KTScrollSliding.bind(this), 20);
+					}
+					// 没有改变的话，就继续累积滚动值
+					$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*6);
 				});
 			});
+		},
+
+		KTScrollFlush : function() {
+
+		},
+
+		KTScrollSliding : function() {
+			// 如果积累滚动值已经用完
+			if ($.KTAnchor.wheel_delta==0) { return }
+			// 查询滚动层内的所有节点
+			$(this).children().each(function(key, children) {
+				// 取得某个节点的 top
+				var children_top = parseInt($(children).css("top"));
+				var drift_speed = Math.abs($.KTAnchor.wheel_delta)>6 ? 6 : Math.abs($.KTAnchor.wheel_delta);
+				var children_drift = ($.KTAnchor.wheel_delta>0) ? drift_speed*5 : drift_speed*-5;
+				$(children).css("top", children_top + children_drift);
+			});
+			// 移动次，将积累的滚动值减一
+			$.KTAnchor.wheel_delta>0 ? $.KTAnchor.wheel_delta-- : $.KTAnchor.wheel_delta++;
+			// 鼠标滚动，100 毫秒后，开始移动这个节点内的元素
+			setTimeout($.fn.KTScrollSliding.bind(this), 20 - Math.abs($.KTAnchor.wheel_delta));
+		},
+
+		KTScrollDrag : function() {
+
 		}
 	});
 
