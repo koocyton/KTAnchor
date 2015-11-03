@@ -49,7 +49,7 @@ a.tree-menu-open div{background: url("img/button_down.gif") no-repeat scroll 27p
 .paging-current-anchor, .paging-current-anchor:hover{color:#fff;background-color:#aaa;font-weight:bolder;}
 
 .app-icons ul li{width:100px;height:100px;margin:32px 0 0 32px;}
-.app-icon {position:relative;width:100%;height:100%;top:0px;}
+.app-icon {position:relative;width:100%;height:100%;top:0px;border:1px solid #aaa;}
 .app-name {position:relative;top:0px;text-align:center;font-weight:bold;color:#444;}
 
 .login-form{position:absolute;width:276px;padding:10px;height:96px;background:none repeat scroll 0 0 rgba(255,255,255,0.9);}
