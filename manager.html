@@ -55,56 +55,48 @@
 
 	<tr>
 		<td class="body-left content-board opacity-80" style="width:20%;">
-		<div class="scroll-container" id="left-container">
-			<div style="top:0px;position:relative;">
-				<script>
-				var menu_data = [
-					{"text":"text1", "menus":[
-						{"text":"text2", "href":"href"},
-						{"text":"text3", "href":"href"}
-					]},
-					{"text":"text4", "menus":[
-						{"text":"text5", "href":"href"},
-						{"text":"text6", "href":"href"}
-					]},
-					{"text":"text7", "menus":[
-						{"text":"text8", "href":"href"},
-						{"text":"text9", "menus":[
-							{"text":"text10", "href":"href" },
-							{"text":"text11", "href":"href" }
+			<div class="scroll-container" id="left-container">
+				<div style="top:0px;position:relative;">
+					<script>
+					var menu_data = [
+						{"text":"text1", "menus":[
+							{"text":"text2", "href":"href"},
+							{"text":"text3", "href":"href"}
+						]},
+						{"text":"text4", "menus":[
+							{"text":"text5", "href":"href"},
+							{"text":"text6", "href":"href"}
+						]},
+						{"text":"text7", "menus":[
+							{"text":"text8", "href":"href"},
+							{"text":"text9", "menus":[
+								{"text":"text10", "href":"href" },
+								{"text":"text11", "href":"href" }
+							]}
+						]},
+						{"text":"text12", "menus":[
+							{"text":"text13", "href":"href"},
+							{"text":"text14", "open":true, "menus":[
+								{"text":"text15", "href":"href" },
+								{"text":"text16", "href":"href" }
+							]}
 						]}
-					]},
-					{"text":"text12", "menus":[
-						{"text":"text13", "href":"href"},
-						{"text":"text14", "open":true, "menus":[
-							{"text":"text15", "href":"href" },
-							{"text":"text16", "href":"href" }
-						]}
-					]}
-				];
-				document.write($.KTTreeMenuHTML.getMenuHtml(menu_data));
-				</script>
+					];
+					document.write($.KTTreeMenuHTML.getMenuHtml(menu_data));
+					</script>
+				</div>
 			</div>
-			<div style="top:0px;position:relative;">
-				<script>
-				document.write($.KTTreeMenuHTML.getMenuHtml(menu_data));
-				</script>
-			</div>
-			<div style="top:0px;position:relative;">
-				<script>
-				document.write($.KTTreeMenuHTML.getMenuHtml(menu_data));
-				</script>
-			</div>
-			<div style="top:0px;position:relative;">
-				<script>
-				document.write($.KTTreeMenuHTML.getMenuHtml(menu_data));
-				</script>
-			</div>
-		</div>
 		</td>
-		<td class="body-right content-board opacity-95" colspan="2" style="width:80%;" id="right-container">
-			<div class="response-container" style="color:#fff;">
-				<div class="paging-container" tatal="300" current="31" limit="30"></div>
+		<td class="body-right content-board opacity-95" colspan="2" style="width:80%;">
+			<div class="scroll-container" id="right-container">
+				<div style="top:0px;position:relative;">
+					<script>
+					document.write($.KTTreeMenuHTML.getMenuHtml(menu_data));
+					</script>
+				</div>
+				<div class="response-container" style="top:0px;position:relative;color:#fff;">
+					<div class="paging-container" tatal="300" current="31" limit="30"></div>
+				</div>
 			</div>
 		</td>
 	</tr>
@@ -113,11 +105,7 @@
 
 <script>
 $(document).ready(function(){
-	$("#left-container, #right-container").css("height", $(window).height()-40);
-	$(window).bind("resize", function(){
-		$("#left-container, #right-container").css("height", $(window).height()-40);
-	});
-	$(document).KTPaging().KTTreeMenu().KTAnchor().KTForm().KTDropDown().KTMouseWheel();
+	$(document).KTLoader();
 });
 </script>
 </body>

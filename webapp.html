@@ -57,7 +57,7 @@
 			<div class="app-icons" style="margin:10px 42px 42px 10px;">
 				<ul>
 
-					<a href="javascript:void(0);" onclick="actionApplication">
+					<a href="javascript:void(0);" onclick="this.actionApplication();">
 						<li>
 							<img src="img/icon_gem.png" class="radius-14 app-icon"></img>
 							<div class="app-name">本地云</div>
@@ -118,7 +118,11 @@
 
 		</td>
 		<td class="body-right content-board opacity-95" style="width:38%;">
-			<div id="response-container" style="color:#fff;">2</div>
+			<div class="scroll-container" id="right-container">
+				<div style="top:0px;position:relative;">
+					<a href="/webapp.html?a=b">aaa</a>
+				</div>
+			</div>
 		</td>
 	</tr>
 
@@ -126,7 +130,7 @@
 
 <script>
 $(document).ready(function(){
-	$(document).KTAnchor().KTForm().KTPaging().KTDropDown();
+	$(document).KTLoader();
 });
 </script>
 </body>

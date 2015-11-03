@@ -201,6 +201,10 @@
 			return ($(this).length>=1) ? true : false;
 		},
 
+		KTLoader: function() {
+			$(this).KTPaging().KTTreeMenu().KTAnchor().KTForm().KTDropDown().KTMouseWheel();
+		},
+
 		KTAnchor : function(success, error, begin, complete) {
 			// 取得 某文档下 所有没有被标注为原生的 anchor
 			this.find("a[native!='yes']").each(function(key, anchor){
@@ -584,22 +588,12 @@
 		},
 
 		KTMouseWheel : function() {
-			// 调整 时，
-			// 主内容的区域的高度，为浏览区域的高度，减去 40
-			$(window).bind("resize", function(){
-				 $("#left-container, #right-container").css("height", $(window).height()-40);
-			});
-
-			// 从配置中获取参数配置
-			var container = $.KTAnchor.scroll_container;
+			// 所有的自定义滚动条层
+			var containers = this.find($.KTAnchor.scroll_container);
 			// 查询匹配的节点
-			this.find(container).each(function(key, mousewheel_bar) {
+			containers.each(function(key, mousewheel_bar) {
 				// 初始化滚动条
 				$(mousewheel_bar).append('<div class="scroll-floor"><dir class="scroll-bar radius-4"></div></div>');
-				// 窗口大小变化时调整滚动条的位置和高度
-				// 手动出发一次
-				$(window).bind("resize", function(){$(mousewheel_bar).ktScrollSliding()});
-				$(window).trigger("resize");
 				// 绑定滚动条拖动事件
 				$(mousewheel_bar).ktScrollDrag();
 				// 绑定滚轮事件
@@ -617,11 +611,22 @@
 					$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*6);
 				});
 			});
+
+			// 调整窗口时时，
+			$(window).bind("resize", function(){
+				// 主内容的区域的高度，为浏览区域的高度，减去 40
+				$("#left-container, #right-container").css("height", $(window).height()-40);
+				// 窗口大小变化时调整滚动条的位置和高度
+				containers.each(function(key, mousewheel_bar) {
+					$(mousewheel_bar).ktScrollSliding();
+				});
+			});
+			// 手动触发一次
+			$(window).trigger("resize");
 		},
 
 		// 滑动页面
 		ktScrollSliding : function() {
-
 			// 容器的高度
 			var container_height = $(this).height();
 			// 内容的高度container_height
