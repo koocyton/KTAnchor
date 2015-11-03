@@ -201,6 +201,13 @@
 			return ($(this).length>=1) ? true : false;
 		},
 
+		actionApplication: function() {
+			var icon = $(this).find("img");
+			icon.animate({top:'-20px'}, 250).animate({top:'0px'}, 130).animate({top: '-10px'}, 100, "", function(){
+				$.KTLog(123);
+			}).animate({top:'0px'}, 100).animate({top: '-5px'}, 50).animate({top:'0px'},  50);
+		},
+
 		KTLoader: function() {
 			$(this).KTPaging().KTTreeMenu().KTAnchor().KTForm().KTDropDown().KTMouseWheel();
 		},
