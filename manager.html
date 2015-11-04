@@ -60,22 +60,22 @@
 					<script>
 					var menu_data = [
 						{"text":"text1", "menus":[
-							{"text":"text2", "href":"rq_normal.html"},
-							{"text":"text3", "href":"rq_normal.html"}
+							{"text":"text2", "href":"rq_normal.php"},
+							{"text":"text3", "href":"rq_normal.php"}
 						]},
 						{"text":"text4", "menus":[
-							{"text":"text5", "href":"rq_normal.html"},
-							{"text":"text6", "href":"rq_normal.html"}
+							{"text":"text5", "href":"rq_normal.php"},
+							{"text":"text6", "href":"rq_normal.php"}
 						]},
 						{"text":"text7", "menus":[
-							{"text":"text8", "href":"rq_normal.html"},
+							{"text":"text8", "href":"rq_normal.php"},
 							{"text":"text9", "menus":[
-								{"text":"text10", "href":"rq_normal.html" },
-								{"text":"text11", "href":"rq_normal.html" }
+								{"text":"text10", "href":"rq_normal.php" },
+								{"text":"text11", "href":"rq_normal.php" }
 							]}
 						]},
 						{"text":"text12", "menus":[
-							{"text":"text13", "href":"rq_normal.html"},
+							{"text":"text13", "href":"rq_normal.php"},
 							{"text":"text14", "open":true, "menus":[
 								{"text":"text15", "href":"rq_form.html" },
 								{"text":"text16", "href":"rq_form.html" }
@@ -88,8 +88,8 @@
 			</div>
 		</td>
 		<td class="body-right content-board opacity-95" colspan="2" style="width:80%;">
-			<div class="scroll-container response-container" id="right-container">
-				<div style="top:0px;position:relative;">
+			<div class="scroll-container" id="right-container">
+				<div class="response-container" style="top:0px;position:relative;">
 					<div style="padding:20px;">
 						<table class="list-table">
 							<colgroup>
@@ -129,9 +129,7 @@
 							</tbody>
 						</table>
 					</div>
-				</div>
-				<div style="top:0px;position:relative;">
-					<div class="paging-container" style="padding:15px;text-align:right;" tatal="300" current="31" limit="30"></div>
+					<div class="paging-container" style="padding:15px;text-align:right;" tatal="300" current="31" limit="30" request_url="rq_normal.php"></div>
 				</div>
 			</div>
 		</td>
