@@ -135,9 +135,21 @@
 			}
 		},
 
+		// show request process
+		showRequestProcess: function(now_process)
+		{
+			now_process = (now_process+1) * 2;
+			var full_process = $(".request-progress").parent().width();
+			$(".request-progress").css({"width":now_process+"px","display":"block"});
+			if (now_process<=full_process) {
+				setTimeout(function(){$.showRequestProcess(now_process)}, 10);
+			}
+		},
+
 		// http request function
 		KTAjax: function(url, method, data, success, error, complete)
 		{
+			this.showRequestProcess(0);
 			// stop before one ajax request
 			if (typeof(window.currentKTAjax)=="object") {
 				try{window.currentKTAjax.abort()}catch(e){;}
@@ -157,6 +169,7 @@
 					if ($.isFunction(error)) error(XMLHttpRequest);
 				},
 				"complete" : function(XMLHttpRequest) {
+					$(".request-progress").delay(800).fadeOut("fast");
 					if ($.isFunction(complete)) complete(XMLHttpRequest);
 				}
 			});
