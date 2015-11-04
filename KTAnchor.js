@@ -68,16 +68,28 @@
 			},
 
 			inputError: function(input, message){
-				$.KTLog("JQuery.KTAnchor.inputError : " + message, input);
-
+				// 关闭之间弹出的错误信息
+				$(".input-error-pop").css("display", "none");
+				// 获取 input , input 和 错误信息存放的容器，错误信息的层
 				var $input = $(input);
-				var $input_parent = $input.parent();
-
-				if (!$.contains($input_parent, $input_parent.find(".input-error-pop"))) {
-					// $input_parent.after("<dd class=\"input-error-pop radius-4\"><b class=\"angle angle-10 input-error-angle\"></b> &nbsp; "+message+"</dd>");
+				var $input_box = $input.parent().parent();
+				var $error_pop = $input_box.find(".input-error-pop");
+				// 如果错误信息层不存在，就创建
+				if (!$.contains($input_box.context, $error_pop.context)) {
+					$input_box.append("<dd class=\"input-error-pop radius-4\"><b class=\"angle-up input-error-angle\"></b> &nbsp; "+message+"</dd>");
 				}
+				// 显示这个错误信息
+				$error_pop.css("display", "block");
+				$input.context.focus();
 
-				// $input_parent.next(".input-error-pop").css("display", "block");
+				if ($input.data("change")!=true) {
+					$input.bind('input change blur',function(ev){
+						if ($input_box.children(".input-error-pop").exist()) {
+							$input_box.children(".input-error-pop").css("display", "none");
+						}
+					});
+					$input.data("change", true);
+				}
 			},
 
 			success: function(container, responseText){
@@ -96,7 +108,7 @@
 					// 填充
 					$(container).empty();
 					$(container).html(responseText);
-					$(container).KTPaging().KTTreeMenu().KTAnchor().KTForm().KTDropDown();
+					$(container).KTLoader();
 				}
 			},
 
@@ -276,11 +288,11 @@
 					// 检查表单
 					// 自定义的错误处理
 					if ($.isFunction(inputError)) {
-						 if (!$(this).checkInputs(inputError)) return false;
+						if (!$(this).checkInputs(inputError)) return false;
 					}
 					// 默认的错误处理，会输出到浏览器的控制台
 					else {
-						 if (!$(this).checkInputs($.KTAnchor.inputError)) return false;
+						if (!$(this).checkInputs($.KTAnchor.inputError)) return false;
 					}
 					// 获取 url
 					var request_url = $form.attr("action");
