@@ -49,5 +49,5 @@
 					<?php
 					$cc = empty($_GET["cc"]) ? 1 : $_GET["cc"];
 					?>
-					<div class="paging-container" style="padding:15px;text-align:right;" tatal="300" current="<?php echo $cc;?>" limit="30" request_url="rq_normal.php"></div>
+					<div class="paging-container" style="padding:15px;text-align:right;" tatal="300" current="<?php echo $cc;?>" limit="30" request_url="rq_normal.php" pushstate="no"></div>
 				</div>
