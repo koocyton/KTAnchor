@@ -45,6 +45,10 @@ a.tree-menu-open div{background: url("img/button_down.gif") no-repeat scroll 27p
 .radius-3{-webkit-border-radius:3px;-khtml-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
 .shadow-3{-webkit-box-shadow:inset 0 1px 3px rgba(0,0,0,0),0 0 8px rgba(0,0,0,0.6);-moz-box-shadow:inset 0 1px 3px rgba(0,0,0,0),0 0 8px rgba(0,0,0,0.6);box-shadow:inset 0 1px 3px rgba(0,0,0,0),0 0 8px rgba(0,0,0,0.6);}
 
+.list-table {width:100%;border-collapse: collapse;border:none;}
+.list-table thead td {height:25px;padding:3px;background-color:#e8e8e8;border:1px solid #dddddd;font-weight: bold;text-align:left;}
+.list-table tbody td {height:25px;line-height:25px;padding:3px;border:1px solid #dddddd;text-align:left;}
+
 .paging-anchor, .paging-anchor:hover{display:inline-block;height:25px;min-width:15px;line-height:25px;text-align:center;color:#333;border:1px solid #ddd;margin:0 3px;padding:0 5px;text-decoration:none;font-size:8.75pt;}
 .paging-current-anchor, .paging-current-anchor:hover{color:#fff;background-color:#aaa;font-weight:bolder;}
 

@@ -60,25 +60,25 @@
 					<script>
 					var menu_data = [
 						{"text":"text1", "menus":[
-							{"text":"text2", "href":"href"},
-							{"text":"text3", "href":"href"}
+							{"text":"text2", "href":"rq_normal.html"},
+							{"text":"text3", "href":"rq_normal.html"}
 						]},
 						{"text":"text4", "menus":[
-							{"text":"text5", "href":"href"},
-							{"text":"text6", "href":"href"}
+							{"text":"text5", "href":"rq_normal.html"},
+							{"text":"text6", "href":"rq_normal.html"}
 						]},
 						{"text":"text7", "menus":[
-							{"text":"text8", "href":"href"},
+							{"text":"text8", "href":"rq_normal.html"},
 							{"text":"text9", "menus":[
-								{"text":"text10", "href":"href" },
-								{"text":"text11", "href":"href" }
+								{"text":"text10", "href":"rq_normal.html" },
+								{"text":"text11", "href":"rq_normal.html" }
 							]}
 						]},
 						{"text":"text12", "menus":[
-							{"text":"text13", "href":"href"},
+							{"text":"text13", "href":"rq_normal.html"},
 							{"text":"text14", "open":true, "menus":[
-								{"text":"text15", "href":"href" },
-								{"text":"text16", "href":"href" }
+								{"text":"text15", "href":"rq_form.html" },
+								{"text":"text16", "href":"rq_form.html" }
 							]}
 						]}
 					];
@@ -88,14 +88,50 @@
 			</div>
 		</td>
 		<td class="body-right content-board opacity-95" colspan="2" style="width:80%;">
-			<div class="scroll-container" id="right-container">
+			<div class="scroll-container response-container" id="right-container">
 				<div style="top:0px;position:relative;">
-					<script>
-					document.write($.KTTreeMenuHTML.getMenuHtml(menu_data));
-					</script>
+					<div style="padding:20px;">
+						<table class="list-table">
+							<colgroup>
+								<col style="width:80px;">
+								<col style="width:80px;">
+								<col style="width:130px;">
+								<col>
+								<col style="width:110px;">
+							</colgroup>
+							<thead>
+								<tr><td></td><td></td><td></td><td></td><td></td></tr>
+							</thead>
+							<tbody>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<div class="response-container" style="top:0px;position:relative;color:#fff;">
-					<div class="paging-container" tatal="300" current="31" limit="30"></div>
+				<div style="top:0px;position:relative;">
+					<div class="paging-container" style="padding:15px;text-align:right;" tatal="300" current="31" limit="30"></div>
 				</div>
 			</div>
 		</td>
