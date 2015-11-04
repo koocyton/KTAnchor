@@ -741,6 +741,11 @@
 			$(scroll_bar).mousedown(function(ev) {
 
 				container_height = $(container).height();
+				content_height = 0;
+				$(container).children().each(function(key, children) {
+					if ($(children).hasClass("scroll-floor")) {return;}
+					content_height += $(children).height();
+				});
 
 				// 鼠标按住滚动条时，滚动条的高度 和 鼠标的位置
 				var begin_mouse_pagey = ev.pageY;
@@ -768,6 +773,7 @@
 					// 内容的 top
 					var children_top = -1*now_scroll_top/(container_height-scroll_height)*(content_height-container_height);
 					content_childrens.css("top", children_top + "px");
+					$.KTLog(container_height, scroll_height, content_height, children_top);
 					return false;
 				});
 				$(window).mouseup(function(ev){

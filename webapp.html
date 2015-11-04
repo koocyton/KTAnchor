@@ -118,11 +118,17 @@
 
 		</td>
 		<td class="body-right content-board opacity-95" style="width:38%;">
+			
 			<div class="scroll-container" id="right-container">
-				<div style="top:0px;position:relative;">
-					<a href="/webapp.html?a=b">aaa</a>
+				<div class="response-container" style="top:0px;position:relative;">
+					<script>
+					$(".response-container").load("rq_normal.php", function(){
+						$(".response-container").KTLoader();
+					});
+					</script>
 				</div>
 			</div>
+
 		</td>
 	</tr>
 

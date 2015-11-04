@@ -90,46 +90,11 @@
 		<td class="body-right content-board opacity-95" colspan="2" style="width:80%;">
 			<div class="scroll-container" id="right-container">
 				<div class="response-container" style="top:0px;position:relative;">
-					<div style="padding:20px;">
-						<table class="list-table">
-							<colgroup>
-								<col style="width:80px;">
-								<col style="width:80px;">
-								<col style="width:130px;">
-								<col>
-								<col style="width:110px;">
-							</colgroup>
-							<thead>
-								<tr><td></td><td></td><td></td><td></td><td></td></tr>
-							</thead>
-							<tbody>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-								<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="paging-container" style="padding:15px;text-align:right;" tatal="300" current="31" limit="30" request_url="rq_normal.php"></div>
+					<script>
+					$(".response-container").load("rq_normal.php", function(){
+						$(".response-container").KTLoader();
+					});
+					</script>
 				</div>
 			</div>
 		</td>
