@@ -67,6 +67,26 @@
 				$(document.body).unbind("click", $.KTAnchor.hiddenDropdown);
 			},
 
+			showSlidMessage: function(message){
+				if ($(".kt-message-pop").length==0) {
+					$(document.body).append('<div class="shadow-3 radius-4 kt-message-pop"></div>');
+				}
+				$(".kt-message-pop").html(message);
+				$(".kt-message-pop").css("bottom","-90px").css("display","block").animate({"bottom":"-5px"});
+				$(".kt-message-pop").bind("click", function(ev){
+					ev.stopPropagation();
+				})
+				$(document.body).bind("click", $.KTAnchor.closeSlidMessage);
+			},
+
+			closeSlidMessage: function(){
+				$('.kt-message-pop').animate({'bottom':'-90px'}, function(){
+					$(".kt-message-pop").html("");
+					$(".kt-message-pop").css("display","none");
+					$(document.body).unbind("click", $.KTAnchor.closeSlidMessage);
+				});
+			},
+
 			inputError: function(input, message){
 				// 关闭之间弹出的错误信息
 				$(".input-error-pop").css("display", "none");
@@ -75,7 +95,7 @@
 				var $input_box = $input.parent().parent();
 				var $error_pop = $input_box.find(".input-error-pop");
 				// 如果错误信息层不存在，就创建
-				if (!$.contains($input_box.context, $error_pop.context)) {
+				if ($error_pop.length==0) {
 					$input_box.append("<dd class=\"input-error-pop radius-4\"><b class=\"angle-up input-error-angle\"></b> &nbsp; "+message+"</dd>");
 				}
 				// 显示这个错误信息
@@ -113,7 +133,8 @@
 			},
 
 			error: function(container, XMLHttpRequest){
-				$.KTLog("JQuery.KTAnchor.error : " + container);
+				$.KTLog("JQuery.KTAnchor.error : " + container, XMLHttpRequest.responseText);
+				$.KTAnchor.showSlidMessage("Error : " + XMLHttpRequest.status);
 			},
 
 			begin: function(){
@@ -136,19 +157,17 @@
 		},
 
 		// show request process
-		showRequestProcess: function(now_process)
-		{
+		showRequestProcess: function(now_process){
 			now_process = (now_process+1) * 2;
-			var full_process = $(".request-progress").parent().width();
-			$(".request-progress").css({"width":now_process+"px","display":"block"});
+			var full_process = $(".kt-request-progress").parent().width();
+			$(".kt-request-progress").css({"width":now_process+"px","display":"block"});
 			if (now_process<=full_process) {
 				setTimeout(function(){$.showRequestProcess(now_process)}, 10);
 			}
 		},
 
 		// http request function
-		KTAjax: function(url, method, data, success, error, complete)
-		{
+		KTAjax: function(url, method, data, success, error, complete){
 			this.showRequestProcess(0);
 			// stop before one ajax request
 			if (typeof(window.currentKTAjax)=="object") {
@@ -169,7 +188,7 @@
 					if ($.isFunction(error)) error(XMLHttpRequest);
 				},
 				"complete" : function(XMLHttpRequest) {
-					$(".request-progress").delay(800).fadeOut("fast");
+					$(".kt-request-progress").delay(800).fadeOut("fast");
 					if ($.isFunction(complete)) complete(XMLHttpRequest);
 				}
 			});
@@ -234,6 +253,11 @@
 		},
 
 		KTLoader: function() {
+			// 如果没有进度条则创建一个
+			if ($(".kt-request-progress").length==0) {
+				$(document.body).append('<div class="kt-request-progress"></div>');
+			}
+			// 加载
 			$(this).KTPaging().KTTreeMenu().KTAnchor().KTForm().KTDropDown().KTMouseWheel();
 		},
 
@@ -642,6 +666,41 @@
 					// 没有改变的话，就继续累积滚动值
 					$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*6);
 				});
+
+				var touch_delta = 0;
+				var touch_pageY = 0;
+
+				// 绑定移动浏览器的滑动屏幕的事件
+				$(mousewheel_bar).bind("touchstart", function(ev){
+					// 如果是单指触摸
+					if (event.touches.length==1) {
+						touch_delta = 0;
+						touch_pageY = event.touches[0].pageY;
+					}
+				})
+
+				// 绑定移动浏览器的滑动屏幕的事件
+				$(mousewheel_bar).bind("touchmove", function(ev){
+					event.preventDefault();
+					// 如果是单指触摸
+					if (event.touches.length==1) {
+						//
+						touch_delta = event.touches[0].pageY - touch_pageY;
+						delta = touch_delta;
+
+						// 如果鼠标滚动的方向发生改变，就重初始化积累值
+						if ((delta>0 && $.KTAnchor.wheel_delta<0) || (delta<0 && $.KTAnchor.wheel_delta>0)) {
+							$.KTAnchor.wheel_delta = 0;
+						}
+						// 当滚轮移动一格时，既积累值正负移动一位，激活页面滚动
+						if ($.KTAnchor.wheel_delta==0) {
+							// 鼠标滚动，100 毫秒后，开始移动这个节点内的元素
+							setTimeout($.fn.ktScrollSliding.bind(this), 20);
+						}
+						// 没有改变的话，就继续累积滚动值
+						$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*6);
+					}
+				})
 			});
 
 			// 调整窗口时时，
@@ -749,7 +808,7 @@
 			});
 			content_childrens = $(content_childrens);
 
-			
+
 			// 设置鼠标拖动的事件
 			$(scroll_bar).mousedown(function(ev) {
 
@@ -775,9 +834,9 @@
 					var scroll_height  = $(scroll_bar).height();
 
 					// 设定滚动条的滑动范围
-					if (now_scroll_top<=0) { 
+					if (now_scroll_top<=0) {
 						now_scroll_top = 0;
-					} 
+					}
 					else if (now_scroll_top>container_height-scroll_height) {
 						now_scroll_top = container_height-scroll_height;
 					}
