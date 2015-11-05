@@ -1,18 +1,18 @@
 # KTAnchor
 
-KTAnchor is a Pjax LIB on JQuery, And there are more extensions
+`KTAnchor` is a Pjax LIB on JQuery, And there are more extensions
 
-KTAnchor 是一个基于 jQuery 的 Pjax 库，你可以单独用他的 Pjax 部分，也可以用其他扩充的功能
+`KTAnchor` 是一个基于 jQuery 的 Pjax 库，你可以单独用他的 Pjax 部分，也可以用其他扩充的功能
 
 Next is three demo page .
 
-### web application : https://wat.doopp.com/webapp.html
+#### web application : https://wat.doopp.com/webapp.html
 
-### admin system : https://wat.doopp.com/manager.html
+#### admin system : https://wat.doopp.com/manager.html
 
-### account login : https://wat.doopp.com/login.html
+#### account login : https://wat.doopp.com/login.html
 
-### 使用
+#### 使用
 ``` html
 	<script>
 	$(document).ready(function(){
@@ -21,7 +21,7 @@ Next is three demo page .
 	</script>
 ```
 
-### default init / 默认的参数初始化，已经在加载 JS 时完成，你可以再次调用 init 来设置你的环境
+#### default init / 默认的参数初始化，已经在加载 JS 时完成，你可以再次调用 init 来设置你的环境
 
 ``` javascript
 $.KTAnchor.init({
@@ -35,7 +35,7 @@ $.KTAnchor.init({
 });
 ```
 
-### 如可以用下面的办法，将分页的参数通过 /pn=... 来传递 而不是 默认的额 ?cc=...
+#### 如可以用下面的办法，将分页的参数通过 /pn=... 来传递 而不是 默认的额 ?cc=...
 以适合你的 write 环境
 
 ``` javascript
