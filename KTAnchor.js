@@ -76,14 +76,14 @@
 				$(".kt-message-pop").bind("click", function(ev){
 					ev.stopPropagation();
 				})
-				$(document.body).bind("click", $.KTAnchor.closeSlidMessage);
+				$(document.body).bind("click touchend", $.KTAnchor.closeSlidMessage);
 			},
 
 			closeSlidMessage: function(){
 				$('.kt-message-pop').animate({'bottom':'-90px'}, function(){
 					$(".kt-message-pop").html("");
 					$(".kt-message-pop").css("display","none");
-					$(document.body).unbind("click", $.KTAnchor.closeSlidMessage);
+					$(document.body).unbind("click touchend", $.KTAnchor.closeSlidMessage);
 				});
 			},
 
