@@ -683,9 +683,9 @@
 					event.preventDefault();
 					// 如果是单指触摸
 					if (event.touches.length==1) {
-						//
-						touch_delta = event.touches[0].pageY - touch_pageY;
-						delta = touch_delta;
+						// 转化，获得 delta
+						delta = (event.touches[0].pageY-touch_pageY>0) ? 1 : -1;
+						touch_pageY = event.touches[0].pageY;
 
 						// 如果鼠标滚动的方向发生改变，就重初始化积累值
 						if ((delta>0 && $.KTAnchor.wheel_delta<0) || (delta<0 && $.KTAnchor.wheel_delta>0)) {
@@ -697,7 +697,7 @@
 							setTimeout($.fn.ktScrollSliding.bind(this), 20);
 						}
 						// 没有改变的话，就继续累积滚动值
-						$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*6);
+						$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*2);
 					}
 				})
 			});
