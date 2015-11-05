@@ -6,13 +6,20 @@ KTAnchor 是一个基于 jQuery 的 Pjax 库，你可以单独用他的 Pjax 部
 
 Next is three demo page .
 
-web application : https://wat.doopp.com/webapp.html
+** web application : https://wat.doopp.com/webapp.html
 
-admin system : https://wat.doopp.com/manager.html
+** admin system : https://wat.doopp.com/manager.html
 
-account login : https://wat.doopp.com/login.html
+** account login : https://wat.doopp.com/login.html
 
-* 可调用的方法
+* 使用
+[code]
+	<script>
+	$(document).ready(function(){
+		$(document.body).KTLoader();
+	});
+	</script>
+[/code]
 
 default init / 默认的参数初始化，已经在加载 JS 时完成，你可以再次调用 init 来设置你的环境
 
