@@ -168,6 +168,10 @@
 
 		// http request function
 		KTAjax: function(url, method, data, success, error, complete){
+			// 如果没有进度条则创建一个
+			if ($(".kt-request-progress").length==0) {
+				$(document.body).append('<div class="kt-request-progress"></div>');
+			}
 			this.showRequestProcess(0);
 			// stop before one ajax request
 			if (typeof(window.currentKTAjax)=="object") {
@@ -252,10 +256,6 @@
 		},
 
 		KTLoader: function() {
-			// 如果没有进度条则创建一个
-			if ($(".kt-request-progress").length==0) {
-				$(document.body).append('<div class="kt-request-progress"></div>');
-			}
 			// 加载
 			$(this).KTPaging().KTTreeMenu().KTAnchor().KTForm().KTDropDown().KTMouseWheel();
 		},
