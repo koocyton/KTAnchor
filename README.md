@@ -36,9 +36,7 @@ $(document).ready(function(){
 `$.fn.KTLoader()` 是一个方便的调用，如果你做了上面的操作，他实际上是执行了
 `$.fn.KTPaging()`; `$.fn.KTTreeMenu()`; `$.fn.KTAnchor()`; `$.fn.KTForm()`; `$.fn.KTDropDown()`; `$.fn.KTMouseWheel()`;
 
-你可以拆开了调用他们，以便符合自己的实际。
-
-比如，你只需要将所有的 A TAG 转变为 PJax 请求
+你可以拆开了调用他们，以便符合自己的实际。比如，你只需要将所有的 `A` TAG 转变为 `Pjax` 请求
 
 ``` html
 <script>
@@ -47,6 +45,39 @@ $(document).ready(function(){
 });
 </script>
 ```
+##### `$.fn.KTAnchor()`
+``` javascript
+$.fn.extend({
+	KTAnchor : function(success, error, begin, complete)
+})
+```
+`$.fn.KTAnchor` 接受四个方法作为参数，分别表示请求 `成功`，`错误`，`开始`，`完成` 的回掉函数
+如果传参数，KTAnchor 会回调默认的方法，等于如下效果
+``` javascript
+$.fn.KTAnchor($.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete)
+```
+你可以自定义这些方法来达到自己需要的效果，比如对包含有 error-message:... 做单独处理
+``` html
+<script>
+function mySuccess(container, responseText){
+	if (/\[error-message\:.+\] => ([^\n]+)/.test(responseText)) {
+		var exception_message = responseText.match(/\[exception-message\:.+\] => ([^\n]+)/);
+		$.KTLog(exception_message);
+	}
+	// 如果返回的是正常文本
+	else {
+		// 填充到指定的容器
+		$(container).empty();
+		$(container).html(responseText);
+		$(container).KTLoader();
+	}
+}
+$(document).ready(function(){
+	$(document.body).KTAnchor(mySuccess);
+});
+</script>
+```
+
 
 `如果打算在移动端浏览器上使用`，建议如下
 ```html
