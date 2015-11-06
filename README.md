@@ -4,7 +4,7 @@
 
 `KTAnchor` 是一个基于 jQuery 的 Pjax 库，你可以单独用他的 Pjax 部分，也可以用其他扩充的功能
 
-Next is three demo page .
+###### demo
 
 `web application` : https://wat.doopp.com/webapp.html
 
@@ -12,7 +12,7 @@ Next is three demo page .
 
 `account login` : https://wat.doopp.com/login.html
 
-`快速使用`
+###### 快速使用
 ``` html
 <html>
 <script src="jquery-1.4.1.min.js"></script>
@@ -31,6 +31,18 @@ $(document).ready(function(){
 </html>
 ```
 
+`$.fn.KTLoader()` 是一个方便的调用，如果你做了上面的操作，他实际上是执行了
+$.fn.KTPaging(); $.fn.KTTreeMenu(); $.fn.KTAnchor(); $.fn.KTForm(); $.fn.KTDropDown(); $.fn.KTMouseWheel();
+你可以拆开了调用他们，以便符合自己的实际。
+比如，你只需要将所有的 A TAG 转变为 PJax 请求
+``` html
+<script>
+$(document).ready(function(){
+	$(document.body).KTAnchor();
+});
+</script>
+```
+
 `如果打算在移动端浏览器上使用`，建议如下
 ```html
 <meta name="viewport" content="width=device-width,initial-scale=0.5,minimum-scale=0.5,maximum-scale=0.5,user-scalable=no"/>
@@ -39,7 +51,11 @@ $(document).ready(function(){
 <meta name="apple-mobile-web-app-status-bar-style" content="white" />
 ```
 
-##### default init / 默认初始化，已经在加载 JS 时完成，你可以再次调用 init 来设置你的环境
+###### 初始化
+`$.KTAnchor.init(options)` 用来初始化你的一些环境，在加载 KTAnchor.js 时，默认环境参数设置，
+你在调用 $.fn.KTLoader() 之前，可以自己做一次初始化，以适合你的使用环境
+
+`options.response_container` 这个值表示默认情况下，你的请求返回会填充到 $(options.response_container)
 
 ``` javascript
 $.KTAnchor.init({
@@ -53,7 +69,7 @@ $.KTAnchor.init({
 });
 ```
 
-##### 如，分页的参数通过 /pn=... 来传递 而不是 默认的额 ?cc=... 以适合你的 write 环境
+###### 如，分页的参数通过 /pn=... 来传递 而不是 默认的额 ?cc=... 以适合你的 write 环境
 
 ``` javascript
 $.KTAnchor.init({
