@@ -46,21 +46,27 @@ $(document).ready(function(){
 </script>
 ```
 
-##### `$.fn.KTAnchor()` 将指定节点里的 <a> 转为 Pjax 请求
-##### `$.fn.KTForm()` 将指定节点里的 <form> 转为 ajax  或 Pjax 请求
+##### `$.fn.KTAnchor()` 将指定节点内 <a> 转为 Pjax 请求。`$.fn.KTForm()` 将指定节点内 <form> 转为 ajax  或 Pjax 请求
 ``` javascript
 $.fn.extend({
 	KTAnchor : function(success, error, begin, complete)
+	KTForm : function(inputError, success, error, begin, complete)
 })
 ```
 
-`$.fn.KTAnchor` 接受四个方法作为参数，分别表示请求 `成功`，`错误`，`开始`，`完成` 的回掉函数，
-如果不传参数，KTAnchor 会回调默认的方法，等于如下效果
+`$.fn.KTAnchor` 接受 4 个回调函数参数，依次为 `成功`，`错误`，`开始` 和 `完成` 的回调
+
+`$.fn.KTForm` 接受 5 个回调函数参数，依次为 `表单验证失败`, `成功`，`错误`，`开始` 和 `完成` 的回调
+
+如果不传参数，`$.fn.KTAnchor` 和 `$.fn.KTForm` 会回调默认的方法，等于如下效果
+
 ``` javascript
 $.fn.KTAnchor($.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete)
+$.fn.KTForm($.KTAnchor.inputError, $.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete)
 ```
 
-你可以自定义这些方法来达到自己需要的效果，比如返回含有 [error-message] => ... ，提取 ... 的内容出来
+你可以自定义回调，比如返回含有 [error-message] => ? 时，alert(?) 的内容出来
+
 ``` html
 <script>
 // container 是 init 设定的指定的节点
@@ -86,7 +92,8 @@ $(document).ready(function(){
 ```
 
 
-`如果打算在移动端浏览器上使用`，建议如下
+##### `如果打算在移动端浏览器上使用`，建议如下
+
 ```html
 <meta name="viewport" content="width=device-width,initial-scale=0.5,minimum-scale=0.5,maximum-scale=0.5,user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -95,6 +102,7 @@ $(document).ready(function(){
 ```
 
 ##### 初始化
+
 `$.KTAnchor.init(options)` 用来初始化你的一些环境，在加载 KTAnchor.js 时，默认环境参数设置，
 你在调用 $.fn.KTLoader() 之前，可以自己做一次初始化，以适合你的使用环境
 
