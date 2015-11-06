@@ -4,7 +4,7 @@
 
 `KTAnchor` 是一个基于 jQuery 的 Pjax 库，你可以单独用他的 Pjax 部分，也可以用其他扩充的功能
 
-###### demo
+##### demo
 
 `web application` : https://wat.doopp.com/webapp.html
 
@@ -12,7 +12,7 @@
 
 `account login` : https://wat.doopp.com/login.html
 
-###### 快速使用
+##### 快速使用
 ``` html
 <html>
 <script src="jquery-1.4.1.min.js"></script>
@@ -31,10 +31,15 @@ $(document).ready(function(){
 </html>
 ```
 
+##### `$.fn.KTLoader()` 
+
 `$.fn.KTLoader()` 是一个方便的调用，如果你做了上面的操作，他实际上是执行了
-$.fn.KTPaging(); $.fn.KTTreeMenu(); $.fn.KTAnchor(); $.fn.KTForm(); $.fn.KTDropDown(); $.fn.KTMouseWheel();
+`$.fn.KTPaging()`; `$.fn.KTTreeMenu()`; `$.fn.KTAnchor()`; `$.fn.KTForm()`; `$.fn.KTDropDown()`; `$.fn.KTMouseWheel()`;
+
 你可以拆开了调用他们，以便符合自己的实际。
+
 比如，你只需要将所有的 A TAG 转变为 PJax 请求
+
 ``` html
 <script>
 $(document).ready(function(){
@@ -51,7 +56,7 @@ $(document).ready(function(){
 <meta name="apple-mobile-web-app-status-bar-style" content="white" />
 ```
 
-###### 初始化
+##### 初始化
 `$.KTAnchor.init(options)` 用来初始化你的一些环境，在加载 KTAnchor.js 时，默认环境参数设置，
 你在调用 $.fn.KTLoader() 之前，可以自己做一次初始化，以适合你的使用环境
 
