@@ -45,34 +45,41 @@ $(document).ready(function(){
 });
 </script>
 ```
-##### `$.fn.KTAnchor()`
+
+##### `$.fn.KTAnchor()` 将指定节点里的 <a> 转为 Pjax 请求
+##### `$.fn.KTForm()` 将指定节点里的 <form> 转为 ajax  或 Pjax 请求
 ``` javascript
 $.fn.extend({
 	KTAnchor : function(success, error, begin, complete)
 })
 ```
-`$.fn.KTAnchor` 接受四个方法作为参数，分别表示请求 `成功`，`错误`，`开始`，`完成` 的回掉函数
-如果传参数，KTAnchor 会回调默认的方法，等于如下效果
+
+`$.fn.KTAnchor` 接受四个方法作为参数，分别表示请求 `成功`，`错误`，`开始`，`完成` 的回掉函数，
+如果不传参数，KTAnchor 会回调默认的方法，等于如下效果
 ``` javascript
 $.fn.KTAnchor($.KTAnchor.success, $.KTAnchor.error, $.KTAnchor.begin, $.KTAnchor.complete)
 ```
-你可以自定义这些方法来达到自己需要的效果，比如对包含有 error-message:... 做单独处理
+
+你可以自定义这些方法来达到自己需要的效果，比如返回含有 [error-message] => ... ，提取 ... 的内容出来
 ``` html
 <script>
+// container 是 init 设定的指定的节点
+// responseText 是请求返回的 字符
 function mySuccess(container, responseText){
-	if (/\[error-message\:.+\] => ([^\n]+)/.test(responseText)) {
-		var exception_message = responseText.match(/\[exception-message\:.+\] => ([^\n]+)/);
-		$.KTLog(exception_message);
+	// 将错误弹出
+	if (/\[error-message\] => ([^\n]+)/.test(responseText)) {
+		var error_message = responseText.match(/\[error-message\] => ([^\n]+)/);
+		alert(error_message);
 	}
-	// 如果返回的是正常文本
+	// 正常的内容填充到指定的容器
 	else {
-		// 填充到指定的容器
 		$(container).empty();
 		$(container).html(responseText);
-		$(container).KTLoader();
+		$(container).KTAnchor();
 	}
 }
 $(document).ready(function(){
+	// 用自定的回调函数
 	$(document.body).KTAnchor(mySuccess);
 });
 </script>
