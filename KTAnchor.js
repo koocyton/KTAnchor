@@ -204,7 +204,11 @@
 		KTTreeMenuHTML: {
 
 			getMenuItemHtml: function(menu_item, menu_level) {
-				return '<a href="'+menu_item.href+'" class="tree-menu tree-menu-'+menu_level+'"><div>'+menu_item.text+'</div></a>';
+				var pushstate_html = "";
+				if (typeof(menu_item.pushstate)=="string" && menu_item.pushstate=="no") {
+					pushstate_html = "pushstate=\"no\"";
+				}
+				return '<a href="'+menu_item.href+'" '+pushstate_html+' class="tree-menu tree-menu-'+menu_level+'"><div>'+menu_item.text+'</div></a>';
 			},
 
 			getMenuFolderHtml: function(menu_item, menu_level) {
@@ -284,7 +288,7 @@
 					var request_url = $anchor.attr("href");
 					// 获取当前的地址
 					var request_ref = window.location.href;
-					// 如果设置了  <a pushstat="no" ... > 那么不做 url pushStat
+					// 如果设置了  <a pushstate="no" ... > 那么不做 url pushState
 					if (typeof($anchor.attr("pushstate"))=="undefined" || $anchor.attr("pushstate")!="no") {
 						window.history.pushState(null, "", request_url);
 					}
