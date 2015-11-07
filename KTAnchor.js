@@ -660,7 +660,7 @@
 			// 查询匹配的节点
 			containers.each(function(key, mousewheel_bar) {
 				// 初始化滚动条
-				$(mousewheel_bar).append('<div class="scroll-floor"><dir class="scroll-bar radius-4"></div></div>');
+				$(mousewheel_bar).css({"padding":"0 9px 0 0"}).append('<div class="scroll-floor"><dir class="scroll-bar radius-4"></div></div>');
 				// 绑定滚动条拖动事件
 				$(mousewheel_bar).ktScrollDrag();
 				// 绑定滚轮事件
