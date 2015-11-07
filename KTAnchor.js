@@ -1,5 +1,7 @@
 (function($){
 
+	var $ = jQuery;
+
 	$.extend({
 
 		KTAnchor: {
@@ -113,7 +115,7 @@
 			},
 
 			success: function(container, responseText){
-
+				// $.KTLog("JQuery.KTAnchor.success : " + container, responseText);
 				// 举例：如果想输入一个脚本的处理方式
 				if (/^<script/.test(responseText)) {
 					$(responseText).appendTo(container).delay(800).remove();
@@ -129,6 +131,7 @@
 					$(container).empty();
 					$(container).html(responseText);
 					$(container).KTLoader();
+					$(container).ktScrollReset();
 				}
 			},
 
@@ -214,7 +217,7 @@
 				}
 			},
 
-			getMenuHtml(menus_data, menu_level) {
+			getMenuHtml: function(menus_data, menu_level) {
 				// 初始化 html
 				var menu_html = "";
 				// 初始化菜单等级
@@ -642,6 +645,15 @@
 			return this;
 		},
 
+		ktScrollReset : function(){
+			var scroll_container = $(this).parent();
+			// $.KTLog(scroll_container, $.KTAnchor.scroll_container.substr(1));
+			if (scroll_container.hasClass($.KTAnchor.scroll_container.substr(1))) {
+				scroll_container.children().css("top", "0px");
+				scroll_container.find(".scroll-bar").css("top", "0px");
+			}
+		},
+
 		KTMouseWheel : function() {
 			// 所有的自定义滚动条层
 			var containers = this.find($.KTAnchor.scroll_container);
@@ -779,7 +791,7 @@
 				// 移动次，将积累的滚动值减一
 				$.KTAnchor.wheel_delta>0 ? $.KTAnchor.wheel_delta-- : $.KTAnchor.wheel_delta++;
 				// 鼠标滚动，100 毫秒后，开始移动这个节点内的元素
-				setTimeout($.fn.ktScrollSliding.bind(this), 20 - Math.abs($.KTAnchor.wheel_delta));
+				setTimeout($.fn.ktScrollSliding.bind(this), 26 - Math.abs($.KTAnchor.wheel_delta));
 			}
 		},
 
