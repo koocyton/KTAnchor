@@ -24,6 +24,9 @@
 			// 鼠标滚动的积累值
 			wheel_delta : 0,
 
+			// 如果是移动端浏览器
+			mobile_browser : !!navigator.userAgent.match(/AppleWebKit.*Mobile.*/)||!!navigator.userAgent.match(/AppleWebKit/),
+
 			/* init parment
 			 *
 			 * options.response_container
@@ -663,46 +666,21 @@
 			var containers = this.find($.KTAnchor.scroll_container);
 			// 查询匹配的节点
 			containers.each(function(key, mousewheel_bar) {
-				// 初始化滚动条
-				$(mousewheel_bar).css({"padding":"0 9px 0 0"}).append('<div class="scroll-floor"><dir class="scroll-bar radius-4"></div></div>');
-				// 绑定滚动条拖动事件
-				$(mousewheel_bar).ktScrollDrag();
-				// 绑定滚轮事件
-				$(mousewheel_bar).bind("mousewheel", function(ev, delta) {
-					// 如果鼠标滚动的方向发生改变，就重初始化积累值
-					if ((delta>0 && $.KTAnchor.wheel_delta<0) || (delta<0 && $.KTAnchor.wheel_delta>0)) {
-						$.KTAnchor.wheel_delta = 0;
-					}
-					// 当滚轮移动一格时，既积累值正负移动一位，激活页面滚动
-					if ($.KTAnchor.wheel_delta==0) {
-						// 鼠标滚动，100 毫秒后，开始移动这个节点内的元素
-						setTimeout($.fn.ktScrollSliding.bind(this), 20);
-					}
-					// 没有改变的话，就继续累积滚动值
-					$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*6);
-				});
-
-				var touch_delta = 0;
-				var touch_pageY = 0;
-
-				// 绑定移动浏览器的滑动屏幕的事件
-				$(mousewheel_bar).bind("touchstart", function(ev){
-					// 如果是单指触摸
-					if (event.touches.length==1) {
-						touch_delta = 0;
-						touch_pageY = event.touches[0].pageY;
-					}
-				})
-
-				// 绑定移动浏览器的滑动屏幕的事件
-				$(mousewheel_bar).bind("touchmove", function(ev){
-					event.preventDefault();
-					// 如果是单指触摸
-					if (event.touches.length==1) {
-						// 转化，获得 delta
-						delta = (event.touches[0].pageY-touch_pageY>0) ? 1 : -1;
-						touch_pageY = event.touches[0].pageY;
-
+				// 如果是移动的浏览器
+				if ($.KTAnchor.mobile_browser==true) {
+					// 绑定移动浏览器的滑动屏幕的事件
+					$(mousewheel_bar).bind("touchmove", function(ev){
+						event.preventDefault();
+					});
+					$(mousewheel_bar).css({"overflow-y":"auto"});
+				}
+				else {
+					// 初始化滚动条
+					$(mousewheel_bar).css({"padding":"0 9px 0 0"}).append('<div class="scroll-floor"><dir class="scroll-bar radius-4"></div></div>');
+					// 绑定滚动条拖动事件
+					$(mousewheel_bar).ktScrollDrag();
+					// 绑定滚轮事件
+					$(mousewheel_bar).bind("mousewheel", function(ev, delta) {
 						// 如果鼠标滚动的方向发生改变，就重初始化积累值
 						if ((delta>0 && $.KTAnchor.wheel_delta<0) || (delta<0 && $.KTAnchor.wheel_delta>0)) {
 							$.KTAnchor.wheel_delta = 0;
@@ -713,19 +691,22 @@
 							setTimeout($.fn.ktScrollSliding.bind(this), 20);
 						}
 						// 没有改变的话，就继续累积滚动值
-						$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*2);
-					}
-				})
+						$.KTAnchor.wheel_delta = $.KTAnchor.wheel_delta + (delta*6);
+					});
+				}
 			});
 
 			// 调整窗口时时，
 			$(window).bind("resize", function(){
 				// 主内容的区域的高度，为浏览区域的高度，减去 40
 				$("#left-container, #right-container").css("height", $(window).height()-40);
-				// 窗口大小变化时调整滚动条的位置和高度
-				containers.each(function(key, mousewheel_bar) {
-					$(mousewheel_bar).ktScrollSliding();
-				});
+				// 如果不是移动的浏览器
+				if ($.KTAnchor.mobile_browser==false) {
+					// 窗口大小变化时调整滚动条的位置和高度
+					containers.each(function(key, mousewheel_bar) {
+						$(mousewheel_bar).ktScrollSliding();
+					});
+				}
 			});
 			// 手动触发一次
 			$(window).trigger("resize");
