@@ -133,7 +133,9 @@
 					// 填充
 					$(container).empty();
 					$(container).html(responseText);
+					// 填充完后重新设定填充区域内的 KTLoader
 					$(container).KTLoader();
+					// 检查有无滚动条需要重置
 					$(container).ktScrollReset();
 				}
 			},
@@ -656,8 +658,15 @@
 			var scroll_container = $(this).parent();
 			// $.KTLog(scroll_container, $.KTAnchor.scroll_container.substr(1));
 			if (scroll_container.hasClass($.KTAnchor.scroll_container.substr(1))) {
-				scroll_container.children().css("top", "0px");
-				scroll_container.find(".scroll-bar").css("top", "0px");
+				// 如果是移动浏览器
+				if ($.KTAnchor.mobile_browser==true) {
+					scroll_container.scrollTop(0)
+				}
+				// 非移动浏览器
+				else {
+					scroll_container.children().css("top", "0px");
+					scroll_container.find(".scroll-bar").css("top", "0px");
+				}
 			}
 		},
 
@@ -669,9 +678,7 @@
 				// 如果是移动的浏览器
 				if ($.KTAnchor.mobile_browser==true) {
 					// 绑定移动浏览器的滑动屏幕的事件
-					$(mousewheel_bar).bind("touchmove", function(ev){
-						event.preventDefault();
-					});
+					// $(mousewheel_bar).bind("touchmove", function(ev){event.preventDefault();});
 					$(mousewheel_bar).css({"overflow-y":"auto"});
 				}
 				else {
