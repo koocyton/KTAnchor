@@ -151,7 +151,51 @@
 
 			complete: function(container, XMLHttpRequest){
 				$.KTLog("JQuery.KTAnchor.complete : " + container);
-			}
+			},
+
+			// 弹出窗口
+		    popupLoader : function(url){
+		        if ($(".kt-popup-loader").length==0) {
+		            $(document.body).append('<div class="kt-popup-loader"><div class="kt-popup-mask"></div><div class="kt-popup-doc radius-5 shadow-3"><div class="scroll-container" style="height:100%;"><div style="top:0px;position:relative;height:43px;"></div><div class="kt-popup-body" style="top:0px;position:relative;"></div></div><div class="kt-popup-shadow shadow-3"></div><div class="kt-popup-head"><span class="kt-popup-close" style="font-family:kt-iconfont;font-size:23px;margin-right:10px;cursor:pointer;">&#xf0f6;</span></div></div></div>');
+		            $(".kt-popup-close").bind("click", function(){$(".kt-popup-loader").css("display", "none")});
+		        }
+		        $(".kt-popup-body").html("loading...");
+		        $(".kt-popup-loader").css("display", "block").KTLoader();
+		        $(".kt-popup-body").load(url, function(){
+		            $(".kt-popup-body").KTLoader();
+		        });
+		    },
+
+			// 左侧菜单被选中
+		    treemenuSelected : function(location_url) {
+		        // 获取当前 URL
+				// var location_url = url;//'http://panda.doopp.com/admin/tracklog';//window.location.href;
+				var url_pattern  = /^https?:\/\/[^\/]+(\/[^\/\?]+)(\/[^\/\?]+)(\/[^\/\?]+)?(\/[^\/\?]+)?/;
+				if (location_url.substr(0,1)=="/") {
+					url_pattern = /^(\/[^\/\?]+)(\/[^\/\?]+)(\/[^\/\?]+)?(\/[^\/\?]+)?/;
+				}
+				var url_match    = location_url.match(url_pattern);
+				if (url_match==null) {
+					return null;
+				}
+				// 从长到短获取节点
+				var menu_elt = $($.KTAnchor.treemenu_container + " a[href='" + url_match[1] + url_match[2] + url_match[3] + url_match[4] + "']");
+				if (!menu_elt.exist()) {
+					menu_elt = $($.KTAnchor.treemenu_container + " a[href='" + url_match[1] + url_match[2] + "']");
+				}
+				if (!menu_elt.exist()) {
+					menu_elt = $($.KTAnchor.treemenu_container + " a[href^='" + url_match[1] + "']");
+				}
+				// 如果是菜单
+				if (menu_elt.parent().hasClass("menu_layout")) {
+					// 检查是否所在 div 未打开
+					if (menu_elt.parent().prev().hasClass("tree-menu-close")) {
+						menu_elt.parent().prev().trigger("click");
+					}
+				}
+				$(".tree-select-menu").removeClass("tree-select-menu").addClass("tree-menu");
+				menu_elt.removeClass("tree-menu").addClass("tree-select-menu");
+		    }
 		},
 
 		// print_r arguments
@@ -316,6 +360,7 @@
 						// 结束 ( 成功或失败后 )
 						function(XMLHttpRequest){
 							$.isFunction(complete) ? complete(container, XMLHttpRequest) : $.KTAnchor.complete(container, XMLHttpRequest);
+							$.KTAnchor.treemenuSelected(request_url);
 						}
 					);
 					// 防止链接点击生效
