@@ -126,7 +126,7 @@
 				// 举例：自定义的匹配处理
 				else if (/\[exception-message\:.+\] => ([^\n]+)/.test(responseText)) {
 					var exception_message = responseText.match(/\[exception-message\:.+\] => ([^\n]+)/);
-					$.KTLog(exception_message);
+					// $.KTLog(exception_message);
 				}
 				// 请求到的文本
 				else {
@@ -136,12 +136,12 @@
 					// 填充完后重新设定填充区域内的 KTLoader
 					$(container).KTLoader();
 					// 检查有无滚动条需要重置
-					$(container).ktScrollReset();
+					$(container).parent($.KTAnchor.scroll_container).ktScrollReset();
 				}
 			},
 
 			error: function(container, XMLHttpRequest){
-				$.KTLog("JQuery.KTAnchor.error : " + container, XMLHttpRequest.responseText);
+				$.KTLog("JQuery.KTAnchor.error : " + container);
 				$.KTAnchor.showSlidMessage("Error : " + XMLHttpRequest.status);
 			},
 
@@ -156,14 +156,19 @@
 			// 弹出窗口
 		    popupLoader : function(url){
 		        if ($(".kt-popup-loader").length==0) {
-		            $(document.body).append('<div class="kt-popup-loader"><div class="kt-popup-mask"></div><div class="kt-popup-doc radius-5 shadow-3"><div class="scroll-container" style="height:100%;"><div style="top:0px;position:relative;height:43px;"></div><div class="kt-popup-body" style="top:0px;position:relative;"></div></div><div class="kt-popup-shadow shadow-3"></div><div class="kt-popup-head"><span class="kt-popup-close" style="font-family:kt-iconfont;font-size:23px;margin-right:10px;cursor:pointer;">&#xf0f6;</span></div></div></div>');
-		            $(".kt-popup-close").bind("click", function(){$(".kt-popup-loader").css("display", "none")});
+		            $(document.body).append('<div class="kt-popup-loader"><div class="kt-popup-mask"></div><div class="kt-popup-doc radius-3 shadow-3"><div class="scroll-container" style="height:100%;"><div style="top:0px;position:relative;height:43px;"></div><div class="kt-popup-body" style="top:0px;position:relative;"></div></div><div class="kt-popup-shadow shadow-3"></div><div class="kt-popup-head"><span class="kt-popup-close" style="font-family:kt-iconfont;font-size:23px;margin-right:10px;cursor:pointer;">&#xf0f6;</span></div></div></div>');
+					// 关闭的动画
+		            $(".kt-popup-close").bind("click", function(){
+						$(".kt-popup-doc").css({"margin-top":"5%", "opacity":"1"}).animate({"margin-top":"2%", "opacity":"0"}, "normal", function(){
+							$(".kt-popup-loader").css("display", "none");
+						});
+					});
 		        }
-		        $(".kt-popup-body").html("loading...");
-		        $(".kt-popup-loader").css("display", "block").KTLoader();
-		        $(".kt-popup-body").load(url, function(){
-		            $(".kt-popup-body").KTLoader();
-		        });
+				// 加载界面
+		        $(".kt-popup-body").html("loading...").load(url,function(){$(".kt-popup-body").KTLoader()});
+				$(".kt-popup-loader").css("display", "block").KTLoader();
+				// 弹出动画
+				$(".kt-popup-doc").css({"margin-top":"2%", "opacity":"0"}).animate({"margin-top":"5%", "opacity":"1"} ,"normal");
 		    },
 
 			// 左侧菜单被选中
@@ -281,11 +286,11 @@
 					if ($.isArray(menu_data.menus)) {
 						menu_html += $.KTTreeMenuHTML.getMenuFolderHtml(menu_data, menu_level);
 						if (menu_level==0) {
-							menu_html += '<div class="menu_layout" style="display: block;">'+$.KTTreeMenuHTML.getMenuHtml(menu_data.menus, 1+menu_level)+'</div>';
+							menu_html += '<div style="display: block;">'+$.KTTreeMenuHTML.getMenuHtml(menu_data.menus, 1+menu_level)+'</div>';
 						}
 						else if (menu_level==1) {
 							var display = (typeof(menu_data.open)!="undefined" && menu_data.open==true) ? "block" : "none" ;
-							menu_html += '<div class="menu_layout" style="display: '+display+';">'+$.KTTreeMenuHTML.getMenuHtml(menu_data.menus, 1+menu_level)+'</div>';
+							menu_html += '<div style="display: '+display+';">'+$.KTTreeMenuHTML.getMenuHtml(menu_data.menus, 1+menu_level)+'</div>';
 						}
 					}
 					// 如果没有子菜单
@@ -621,8 +626,9 @@
 		},
 
 		setMainMenuEvent : function(){
+			var $treemenu_elt = $(this)
 			// 开始循环
-			this.children("a").each(function(key, menu_elt) {
+			$treemenu_elt.children("a").each(function(key, menu_elt) {
 				// 取得一个节点
 				var $menu_elt = $(menu_elt);
 				// 取得下一个节点
@@ -641,6 +647,8 @@
 							$next_elt.css("display", "none");
 							if ($menu_elt.hasClass("tree-menu-1")) $menu_elt.removeClass("tree-menu-open").addClass("tree-menu-close");
 						}
+						// 重置滚动条
+						$treemenu_elt.parents($.KTAnchor.scroll_container).ktScrollSliding();
 						// menu_elt 没错
 						menu_elt.blur();
 						return false;
@@ -662,6 +670,10 @@
 				if ($click_elt.data("click")==true) return;
 				// 取弹窗
 				var $popup_elt = $click_elt.next();
+				// 弹窗内节点取出，如果某节点被点，弹出窗收回
+				$popup_elt.find("a").bind("click", function(e){
+					$popup_elt.fadeOut("fast");
+				});
 				// 绑定
 				$click_elt.bind("click", function(e){
 					// 不冒泡 ... ?
@@ -669,7 +681,7 @@
 					// 当前弹出窗关闭还是开启呢 ？
 					var style_display = $popup_elt.css("display");
 					// 先将弹出窗都关闭
-					$(container).each(function(key, elt){
+					$(container).each(function(key, elt) {
 						$(elt).children().last().css("display", "none");
 					});
 					// 如果本来下拉菜单已经弹出
@@ -700,17 +712,17 @@
 		},
 
 		ktScrollReset : function(){
-			var scroll_container = $(this).parent();
+			var $scroll_container = $(this);
 			// $.KTLog(scroll_container, $.KTAnchor.scroll_container.substr(1));
-			if (scroll_container.hasClass($.KTAnchor.scroll_container.substr(1))) {
+			if ($scroll_container.hasClass($.KTAnchor.scroll_container.substr(1))) {
 				// 如果是移动浏览器
 				if ($.KTAnchor.mobile_browser==true) {
-					scroll_container.scrollTop(0)
+					$scroll_container.scrollTop(0)
 				}
 				// 非移动浏览器
 				else {
-					scroll_container.children().css("top", "0px");
-					scroll_container.find(".scroll-bar").css("top", "0px");
+					$scroll_container.children().css("top", "0px");
+					$scroll_container.ktScrollSliding();
 				}
 			}
 		},
@@ -893,7 +905,7 @@
 					// 内容的 top
 					var children_top = -1*now_scroll_top/(container_height-scroll_height)*(content_height-container_height);
 					content_childrens.css("top", children_top + "px");
-					$.KTLog(container_height, scroll_height, content_height, children_top);
+					// $.KTLog(container_height, scroll_height, content_height, children_top);
 					return false;
 				});
 				$(window).mouseup(function(ev){
