@@ -84,12 +84,16 @@
 				$(document.body).bind("click touchend", $.KTAnchor.closeSlidMessage);
 			},
 
+			// 关闭最下面滑入的错误提示信息
 			closeSlidMessage: function(){
-				$('.kt-message-pop').animate({'bottom':'-90px'}, function(){
-					$(".kt-message-pop").html("");
-					$(".kt-message-pop").css("display","none");
-					$(document.body).unbind("click touchend", $.KTAnchor.closeSlidMessage);
-				});
+				if ($(".kt-message-pop").css("display")!=="none")
+				{
+					$('.kt-message-pop').animate({'bottom':'-90px'}, function(){
+						$(".kt-message-pop").html("");
+						$(".kt-message-pop").css("display","none");
+						$(document.body).unbind("click touchend", $.KTAnchor.closeSlidMessage);
+					});
+				}
 			},
 
 			inputError: function(input, message){
@@ -120,13 +124,14 @@
 			success: function(container, responseText){
 				// $.KTLog("JQuery.KTAnchor.success : " + container, responseText);
 				// 举例：如果想输入一个脚本的处理方式
-				if (/^<script/.test(responseText)) {
-					$(responseText).appendTo(container).delay(800).remove();
+				if (/^<script>(.+)<\/script>$/.test(responseText)) {
+					var response = responseText.match(/<script>(.+)<\/script>/);
+					eval(response[1]);
 				}
 				// 举例：自定义的匹配处理
-				else if (/\[exception-message\:.+\] => ([^\n]+)/.test(responseText)) {
-					var exception_message = responseText.match(/\[exception-message\:.+\] => ([^\n]+)/);
-					// $.KTLog(exception_message);
+				else if (/\[exception-message\] => ([^\n]+)/.test(responseText)) {
+					var exception_message = responseText.match(/\[exception-message\] => ([^\n]+)/);
+					$.KTAnchor.showSlidMessage(exception_message[1]);
 				}
 				// 请求到的文本
 				else {
@@ -137,6 +142,8 @@
 					$(container).KTLoader();
 					// 检查有无滚动条需要重置
 					$(container).parent($.KTAnchor.scroll_container).ktScrollReset();
+					// 关闭窗口下面滑入的错误提示信息
+					$.KTAnchor.closeSlidMessage();
 				}
 			},
 
@@ -175,9 +182,9 @@
 		    treemenuSelected : function(location_url) {
 		        // 获取当前 URL
 				// var location_url = url;//'http://panda.doopp.com/admin/tracklog';//window.location.href;
-				var url_pattern  = /^https?:\/\/[^\/]+(\/[^\/\?]+)(\/[^\/\?]+)(\/[^\/\?]+)?(\/[^\/\?]+)?/;
+				var url_pattern  = /^https?:\/\/[^\/]+(\/[^\/\?]+)(\/[^\/\?]+)?(\/[^\/\?]+)?(\/[^\/\?]+)?/;
 				if (location_url.substr(0,1)=="/") {
-					url_pattern = /^(\/[^\/\?]+)(\/[^\/\?]+)(\/[^\/\?]+)?(\/[^\/\?]+)?/;
+					url_pattern = /^(\/[^\/\?]+)(\/[^\/\?]+)?(\/[^\/\?]+)?(\/[^\/\?]+)?/;
 				}
 				var url_match    = location_url.match(url_pattern);
 				if (url_match==null) {
@@ -203,6 +210,19 @@
 		    }
 		},
 
+		KTDateFormat: function(ts, dt)   {
+			var now = ts ? new Date(parseInt(ts)) : new Date();
+			var y = now.getFullYear();
+			var m = ((now.getMonth()+1)<10?"0":"")+(now.getMonth()+1);
+			var d = (now.getDate()<10?"0":"")+now.getDate();
+			var h = (now.getHours()<10?"0":"")+now.getHours();
+			var i = (now.getMinutes()<10?"0":"")+now.getMinutes();
+			var s = (now.getSeconds()<10?"0":"")+now.getSeconds();
+			var nowDate = y + "-" + m + "-" + d;
+			var nowDatetime = nowDate + " " + h + ":" + i + ":" + s;
+			return (dt) ? nowDatetime : nowDate;
+		},
+
 		// print_r arguments
 		KTLog: function(){
 			if (window.console && window.console.log && arguments.length>=1){
@@ -225,6 +245,7 @@
 
 		// http request function
 		KTAjax: function(url, method, data, success, error, complete){
+
 			// 如果没有进度条则创建一个
 			if ($(".kt-request-progress").length==0) {
 				$(document.body).append('<div class="kt-request-progress"></div>');
@@ -239,9 +260,9 @@
 				"url"  : url,
 				"type" : method,
 				"data" : data,
-				"contentType" : false,
+				"contentType" : (method=="POST") ? "application/x-www-form-urlencoded" : false,
 				"processData" : false,
-				"headers" : {"Ajax-Request":"jQuery.KTAjax " + $.KTAnchor.version},
+				"headers" : {"Ajax-Request":"jQuery.KTAnchor"},
 				"success" : function(responseText) {
 					if ($.isFunction(success)) success(responseText);
 				},
@@ -397,7 +418,8 @@
 					// 默认是 Form method 是 POST
 					var method = "POST";
 					// 获取表单数据
-					var data = new FormData(this);
+					// var data = new FormData(this);
+					var data = $(this).serialize();
 					// 获取返回数据将填充哪个节点
 					var container = $.KTAnchor.response_container;
 					if (typeof($form.attr("container"))!="undefined" && $form.attr("container").length>1) {
@@ -405,6 +427,28 @@
 					}
 					// 开始
 					$.isFunction(begin) ? begin() : $.KTAnchor.begin();
+
+					// 如果 form 是 GET, 适合用来搜索
+					if ($form.attr("method")=="get") {
+						// 将字段拼接在 action 后
+						$form.find("input").each(function(key, input_elt){
+							input_elt = $(input_elt);
+							if (input_elt.attr("name").length>0 && input_elt.val().length>0) {
+								if (/\?/.test(request_url)) {
+									request_url = request_url + "&" + input_elt.attr("name") + "=" + encodeURI(input_elt.val());
+								}
+								else {
+									request_url = request_url + "?" + input_elt.attr("name") + "=" + encodeURI(input_elt.val());
+								}
+							}
+						});
+						method = "GET";
+						data = null;
+						// 如果设置了  <a pushstate="no" ... > 那么不做 url pushState
+						if (typeof($form.attr("pushstate"))=="undefined" || $form.attr("pushstate")!="no") {
+							window.history.pushState(null, "", request_url);
+						}
+					}
 					// ajax 请求，并回调
 					$.KTAjax(request_url, method, data,
 						// 成功
@@ -430,7 +474,7 @@
 
 		checkInputs : function(inputError) {
 			var field_ok = true;
-			$(this).find("input").each(function(key, input_elt){
+			$(this).find(":input").each(function(key, input_elt){
 				var validation = $(input_elt).attr("validation");
 				if (typeof(validation)=="string" && validation.length>=1) {
 					var input_value = $(input_elt).val();
