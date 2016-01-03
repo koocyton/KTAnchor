@@ -129,9 +129,9 @@
 					eval(response[1]);
 				}
 				// 举例：自定义的匹配处理
-				else if (/\[exception-message\] => ([^\n]+)/.test(responseText)) {
-					var exception_message = responseText.match(/\[exception-message\] => ([^\n]+)/);
-					$.KTAnchor.showSlidMessage(exception_message[1]);
+				else if (/^\[ktanchor-message:(.+)\]$/.test(responseText)) {
+					var message = responseText.match(/^\[ktanchor-message:(.+)\]$/);
+					$.KTAnchor.showSlidMessage(message[1]);
 				}
 				// 请求到的文本
 				else {
@@ -163,7 +163,7 @@
 			// 弹出窗口
 		    popupLoader : function(url){
 		        if ($(".kt-popup-loader").length==0) {
-		            $(document.body).append('<div class="kt-popup-loader"><div class="kt-popup-mask"></div><div class="kt-popup-doc radius-3 shadow-3"><div class="scroll-container" style="height:100%;"><div style="top:0px;position:relative;height:43px;"></div><div class="kt-popup-body" style="top:0px;position:relative;"></div></div><div class="kt-popup-shadow shadow-3"></div><div class="kt-popup-head"><span class="kt-popup-close" style="font-family:kt-iconfont;font-size:23px;margin-right:10px;cursor:pointer;">&#xf0f6;</span></div></div></div>');
+		            $(document.body).append('<div class="kt-popup-loader"><div class="kt-popup-mask"></div><div class="kt-popup-doc radius-3 shadow-3"><div class="scroll-container" style="height:100%;"><div style="top:0px;position:relative;height:43px;"></div><div class="kt-popup-body" style="top:0px;position:relative;"></div></div><div class="kt-popup-shadow shadow-3"></div><div class="kt-popup-head"><span class="kt-popup-close" style="font-family:octicons;font-size:23px;margin-right:10px;cursor:pointer;">&#xf081;</span></div></div></div>');
 					// 关闭的动画
 		            $(".kt-popup-close").bind("click", function(){
 						$(".kt-popup-doc").css({"margin-top":"5%", "opacity":"1"}).animate({"margin-top":"2%", "opacity":"0"}, "normal", function(){
@@ -402,6 +402,18 @@
 			this.find("form[native!='yes']").each(function(key, form){
 				// jQuery 对象
 				var $form = $(form);
+				$form.find(":input").each(function(key, input_elt){
+					$(input_elt).bind("change keyup", function(){
+						if ($form.checkInputs()){
+							var button_class = $form.find("button[type='submit']").attr("button-class");
+							var submit_class = (button_class && button_class=="submit-btn") ? "submit-btn" : "button-btn";
+							$form.find("button[type='submit']").removeClass("disable-btn").addClass(submit_class);
+						}
+						else {
+							$form.find("button[type='submit']").removeClass(submit_class).addClass("disable-btn");
+						}
+					});
+				});
 				// 将 form 绑定 submit 时间
 				$form.bind("submit", function(){
 					// 检查表单
@@ -467,6 +479,7 @@
 					// 禁止表单继续提交
 					return false;
 				});
+				$($form.find(":input")[0]).trigger("change");
 			});
 			// 返回 JQuery 对象
 			return this;
@@ -481,7 +494,7 @@
 					// 不能为空
 					if (validation=="/!empty/") {
 						if (input_value.length<1) {
-							inputError(input_elt, "Can not be empty");
+							if ($.isFunction(inputError)) inputError(input_elt, "Can not be empty");
 							field_ok = false;
 							return false;
 						}
@@ -490,7 +503,7 @@
 					else if (/\/email:(.+)\//.test(validation)) {
 						if (!/^([0-9A-Za-z\-_\.]+)@([0-9A-Za-z\-_\.]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g.test(input_value)){
 							var match = validation.match(/\/email:(.+)\//);
-							inputError(input_elt, match[1]);
+							if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 							field_ok = false;
 							return false;
 						}
@@ -499,7 +512,7 @@
 					else if (/\/password:(.+)\//.test(validation)) {
 						if (input_value.length<8) {
 							var match = validation.match(/\/password:(.+)\//);
-							inputError(input_elt, match[1]);
+							if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 							field_ok = false;
 							return false;
 						}
@@ -509,7 +522,7 @@
 						if (input_value.length>=1) {
 							if (input_value.length<8) {
 								var match = validation.match(/\/edpassword:(.+)\//);
-								inputError(input_elt, match[1]);
+								if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 								field_ok = false;
 								return false;
 							}
@@ -520,7 +533,7 @@
 						var match = validation.match(/\/repassword:(.+):(.+)\//);
 						var password_value = $(form_elt).find("input[name="+match[1]+"]").val();
 						if (password_value!=input_value) {
-							inputError(input_elt, match[1]);
+							if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 							field_ok = false;
 							return false;
 						}
@@ -529,7 +542,7 @@
 					else if (/\/!empty:(.+)\//.test(validation)) {
 						if (input_value.length<1) {
 							var match = validation.match(/\/!empty:(.+)\//);
-							inputError(input_elt, match[1]);
+							if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 							field_ok = false;
 							return false;
 						}
@@ -538,7 +551,7 @@
 					else if (/\/mobile:(.+)\//.test(validation)) {
 						if (!/^1\d{10}$/g.test(input_value)){
 							var match = validation.match(/\/mobile:(.+)\//);
-							inputError(input_elt, match[1]);
+							if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 							field_ok = false;
 							return false;
 						}
@@ -547,7 +560,7 @@
 					else if (/\/date:(.+)\//.test(validation)) {
 						if (!/^[1|2]\d{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[1-2][0-9]|3[1-2])$/g.test(input_value)){
 							var match = validation.match(/\/date:(.+)\//);
-							inputError(input_elt, match[1]);
+							if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 							field_ok = false;
 							return false;
 						}
@@ -556,7 +569,7 @@
 					else if (/\/datetime:(.+)\//.test(validation)) {
 						if (!/^[1|2]\d{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[1-2][0-9]|3[1-2]) ([0|1][0-9]|2[0-4])\:([0-5][0-9])\:([0-5][0-9])$/g.test(input_value)){
 							var match = validation.match(/\/datetime:(.+)\//);
-							inputError(input_elt, match[1]);
+							if ($.isFunction(inputError)) inputError(input_elt, match[1]);
 							field_ok = false;
 							return false;
 						}
@@ -574,12 +587,12 @@
 				// jQuery 对象
 				var $paging_elt = $(paging_bar);
 				// 获取主要的数据
-				var tatal = 0 + $paging_elt.attr("tatal");
+				var total = 0 + $paging_elt.attr("total");
 				var current = 0 + $paging_elt.attr("current");
 				var limit = $paging_elt.attr("limit");
 				if (typeof(limit)=="undefined") limit = $.KTAnchor.paging_limit;
 				// 最大页码 当前页码
-				var max_page = Math.ceil(tatal / limit);
+				var max_page = Math.ceil(total / limit);
 				var current_page = Math.ceil(current / limit);
 				// 分页最长显示 7 个
 				var page_list = [1,2,3,4,5,6,7];
